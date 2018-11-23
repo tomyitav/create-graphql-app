@@ -1,6 +1,5 @@
-// Import here Polyfills if needed. Recommended core-js (npm i -D core-js)
-// import "core-js/fn/array.find"
-// ...
+#!/usr/bin/env node
+
 import * as program from 'commander'
 import allCommands from './commands/all-commands'
 

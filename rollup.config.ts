@@ -4,6 +4,8 @@ import sourceMaps from 'rollup-plugin-sourcemaps'
 import camelCase from 'lodash.camelcase'
 import typescript from 'rollup-plugin-typescript2'
 import json from 'rollup-plugin-json'
+import shebang from 'rollup-plugin-preserve-shebang'
+import * as path from 'path'
 
 const pkg = require('./package.json')
 
@@ -11,6 +13,9 @@ const libraryName = 'create-graphql-app'
 
 export default {
   input: `src/${libraryName}.ts`,
+  acorn: {
+    allowHashBang: true
+  },
   output: [
     { file: pkg.main, name: camelCase(libraryName), format: 'umd', sourcemap: true },
     { file: pkg.module, format: 'es', sourcemap: true },
@@ -23,6 +28,8 @@ export default {
   plugins: [
     // Allow json resolution
     json(),
+    // Allow # for #!/usr/bin/env node
+    shebang(),
     // Compile TypeScript files
     typescript({ useTsconfigDeclarationDir: true }),
     // Allow bundling cjs modules (unlike webpack, rollup doesn't understand cjs)
