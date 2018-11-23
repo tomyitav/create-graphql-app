@@ -33,7 +33,7 @@
     "start": "rollup -c rollup.config.ts",
     "test": "jest",
     "test:watch": "jest --watch",
-    "test:prod": "npm run lint && npm run test -- --coverage --no-cache",
+    "test:prod": "npm run lint && npm run test",
     "deploy-docs": "ts-node tools/gh-pages-publish",
     "report-coverage": "cat ./coverage/lcov.info | coveralls",
     "commit": "git-cz",
@@ -76,7 +76,7 @@
         "statements": 95
       }
     },
-    "collectCoverage": true,
+    "collectCoverage": false,
     "collectCoverageFrom": [
       "src/*.{js,ts}"
     ]
