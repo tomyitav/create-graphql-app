@@ -1,6 +1,6 @@
 {
-  "name": "create-graphql-app",
-  "version": "0.0.1",
+  "name": "generate-graphql-app",
+  "version": "0.0.0-development",
   "description": "Cli tool for bootstrapping production grade GraphQL server",
   "keywords": [
     "graphql",
@@ -9,23 +9,23 @@
     "typescript",
     "apollo"
   ],
-  "main": "dist/create-graphql-app.umd.js",
-  "module": "dist/create-graphql-app.es5.js",
-  "typings": "dist/types/create-graphql-app.d.ts",
+  "main": "dist/generate-graphql-app.umd.js",
+  "module": "dist/generate-graphql-app.es5.js",
+  "typings": "dist/types/generate-graphql-app.d.ts",
   "files": [
     "dist"
   ],
   "author": "Tom <tomyitav@gmail.com>",
   "repository": {
     "type": "git",
-    "url": "https://github.com/tomyitav/create-graphql-app.git"
+    "url": "https://github.com/tomyitav/generate-graphql-app.git"
   },
   "license": "MIT",
   "engines": {
     "node": ">=6.0.0"
   },
   "preferGlobal": true,
-  "bin": "./dist/lib/create-graphql-app.js",
+  "bin": "./dist/lib/generate-graphql-app.js",
   "scripts": {
     "lint": "tslint  --project tsconfig.json -t codeFrame 'src/**/*.ts' 'test/**/*.ts'",
     "prebuild": "rimraf dist",
