@@ -14,7 +14,7 @@ Cli tool for bootstrapping production grade GraphQL server, using:
 
 ## Installation
 
-npm install -g generate-graphql-app
+```npm install -g generate-graphql-app```
 
 ### Init server command
 
