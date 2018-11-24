@@ -85,6 +85,9 @@
     "semi": false,
     "singleQuote": true
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "commitlint": {
     "extends": [
       "@commitlint/config-conventional"
