@@ -20,9 +20,7 @@ Cli tool for bootstrapping production grade GraphQL server, using:
 
 Open shell in the desired folder for bootstrapping the server, and typed:
 
-```generate-graphql-app init <project-name>```
+```gga init <project-name>```
 
 The command will prompt available server seeds options. Choose the boilerplate project
 you want, and start coding! 
-
-

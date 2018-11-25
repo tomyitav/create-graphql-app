@@ -8,7 +8,7 @@ import shebang from 'rollup-plugin-preserve-shebang'
 
 const pkg = require('./package.json')
 
-const libraryName = 'generate-graphql-app'
+const libraryName = 'gga'
 
 export default {
   input: `src/${libraryName}.ts`,

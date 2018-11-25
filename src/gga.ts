@@ -3,7 +3,7 @@
 import * as program from 'commander'
 import allCommands from './commands/all-commands'
 
-program.version('0.0.1').description('Cli tool for bootstrapping production grade GraphQL server')
+program.version('1.2.0').description('Cli tool for bootstrapping production grade GraphQL server')
 
 for (let command of allCommands) {
   program
