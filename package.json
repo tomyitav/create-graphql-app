@@ -25,7 +25,9 @@
     "node": ">=6.0.0"
   },
   "preferGlobal": true,
-  "bin": "./dist/lib/gga.js",
+  "bin": {
+    "gga": "./dist/lib/gga.js"
+  },
   "scripts": {
     "lint": "tslint  --project tsconfig.json -t codeFrame 'src/**/*.ts' 'test/**/*.ts'",
     "prebuild": "rimraf dist",
