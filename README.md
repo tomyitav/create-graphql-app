@@ -3,6 +3,7 @@
 [![Build Status](https://travis-ci.org/tomyitav/generate-graphql-app.svg?branch=master)](https://travis-ci.org/tomyitav/generate-graphql-app)
 [![npm](https://img.shields.io/npm/v/generate-graphql-app.svg)](https://www.npmjs.com/package/generate-graphql-app)
 [![MIT licensed](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
+[![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
 
 Cli tool for bootstrapping production grade GraphQL server, using:
 

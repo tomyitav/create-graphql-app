@@ -1,5 +1,6 @@
 export abstract class AbstractCommand {
-  public abstract getName(): string;
-  public abstract getDescription(): string;
-  public abstract getAction(): (...args: any[]) => void;
+  public abstract getName(): string
+  public abstract getDescription(): string
+  public abstract getAlias(): string
+  public abstract getAction(): (...args: any[]) => void
 }

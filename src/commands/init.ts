@@ -20,6 +20,10 @@ export class Init extends AbstractCommand {
     return 'Create new project'
   }
 
+  public getAlias(): string {
+    return 'i'
+  }
+
   public getAction(): (...args: any[]) => void {
     return async (projectName: string) => {
       try {
