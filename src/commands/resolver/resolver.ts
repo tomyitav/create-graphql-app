@@ -1,9 +1,14 @@
 import { AbstractCommand } from '../abstract-command'
 import * as transform from 'graphql-json-schema'
-import { Schema } from './resolver-types'
-
-const resolverPrefix = 'const resolveFunctions = {'
-const resolverSuffix = '};'
+import { Operation, OperationParams, Schema } from './resolver-types'
+import {
+  gqlMethodSignature,
+  keysToGenerate,
+  operationPrefix,
+  operationSuffix,
+  resolverPrefix,
+  resolverSuffix
+} from './resolver-constants'
 
 export class Resolver extends AbstractCommand {
   public getName(): string {
@@ -14,7 +19,7 @@ export class Resolver extends AbstractCommand {
     return async (pathToType: string) => {
       const schema = this.getSchemaByFilePath(pathToType)
       const schemaJsonRepresentation = transform(schema)
-      return schemaJsonRepresentation
+      return this.resolverContentByJsonSchema(schemaJsonRepresentation)
     }
   }
 
@@ -28,7 +33,32 @@ export class Resolver extends AbstractCommand {
 
   private resolverContentByJsonSchema(jsonSchema: Schema): string {
     const schemaDefinitions = jsonSchema.definitions
-    return ''
+    let resolverContent = resolverPrefix
+    Object.entries(schemaDefinitions).forEach(([key, operation]: [string, Operation]) => {
+      if (keysToGenerate.includes(key)) {
+        resolverContent += this.getTypeOperationContent(operation)
+      }
+    })
+    resolverContent += resolverSuffix
+    return resolverContent
+  }
+
+  private getTypeOperationContent(operation: Operation): string {
+    let opStrRepresentation = '\t' + operation.title + operationPrefix
+    const operationProperties = operation.properties
+    Object.entries(operationProperties).forEach(
+      ([key, operationParams]: [string, OperationParams]) => {
+        opStrRepresentation += this.getTypeOperationParamContent(operationParams)
+      }
+    )
+
+    opStrRepresentation += operationSuffix
+    return opStrRepresentation
+  }
+
+  private getTypeOperationParamContent(operationParams: OperationParams): string {
+    let operationParamStr = '\t' + operationParams.title + gqlMethodSignature + operationSuffix
+    return operationParamStr
   }
 
   private getSchemaByFilePath(pathToType: string): string {
