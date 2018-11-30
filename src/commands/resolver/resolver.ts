@@ -1,13 +1,16 @@
 import { AbstractCommand } from '../abstract-command'
 import * as transform from 'graphql-json-schema'
-import { Operation, OperationParams, Schema } from './resolver-types'
+import { Operation, Schema } from './resolver-types'
 import {
+  functionOperationPrefix,
+  gqlMethodReturns,
   gqlMethodSignature,
   keysToGenerate,
   operationPrefix,
   operationSuffix,
   resolverPrefix,
-  resolverSuffix
+  resolverSuffix,
+  subscriptionSubscribeDefinition
 } from './resolver-constants'
 
 export class Resolver extends AbstractCommand {
@@ -46,18 +49,27 @@ export class Resolver extends AbstractCommand {
   private getTypeOperationContent(operation: Operation): string {
     let opStrRepresentation = '\t' + operation.title + operationPrefix
     const operationProperties = operation.properties
-    Object.entries(operationProperties).forEach(
-      ([key, operationParams]: [string, OperationParams]) => {
-        opStrRepresentation += this.getTypeOperationParamContent(operationParams)
-      }
-    )
+    Object.keys(operationProperties).forEach((key: string) => {
+      opStrRepresentation += this.getTypeOperationParamContent(key, operation)
+    })
 
     opStrRepresentation += operationSuffix
     return opStrRepresentation
   }
 
-  private getTypeOperationParamContent(operationParams: OperationParams): string {
-    let operationParamStr = '\t' + operationParams.title + gqlMethodSignature + operationSuffix
+  private getTypeOperationParamContent(key: string, operation: Operation): string {
+    let operationParamStr = '\t' + key
+    if (operation.title === 'Subscription') {
+      operationParamStr +=
+        operationPrefix +
+        '\t' +
+        subscriptionSubscribeDefinition +
+        gqlMethodSignature +
+        functionOperationPrefix +
+        operationSuffix
+    } else {
+      operationParamStr += gqlMethodSignature + gqlMethodReturns
+    }
     return operationParamStr
   }
 
