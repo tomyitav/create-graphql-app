@@ -70,6 +70,10 @@
       "/node_modules/",
       "/test/"
     ],
+    "watchPathIgnorePatterns": [
+      "/node_modules/",
+      "/test/output/actual"
+    ],
     "coverageThreshold": {
       "global": {
         "branches": 90,

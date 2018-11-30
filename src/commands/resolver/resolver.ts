@@ -3,26 +3,35 @@ import * as transform from 'graphql-json-schema'
 import { Operation, Schema } from './resolver-types'
 import {
   functionOperationPrefix,
-  gqlMethodReturns,
+  gqlMethodSuffix,
   gqlMethodSignature,
   keysToGenerate,
   operationPrefix,
   operationSuffix,
   resolverPrefix,
   resolverSuffix,
-  subscriptionSubscribeDefinition
+  subscriptionSubscribeDefinition,
+  operationFuntionsSuffix
 } from './resolver-constants'
+import { writeToFile } from '../../utils/write-to-file'
 
 export class Resolver extends AbstractCommand {
   public getName(): string {
-    return 'resolver <path-to-type>'
+    return 'resolver <path-to-type> <path-to-resolver>'
   }
 
   public getAction(): (...args: any[]) => void {
-    return async (pathToType: string) => {
-      const schema = this.getSchemaByFilePath(pathToType)
-      const schemaJsonRepresentation = transform(schema)
-      return this.resolverContentByJsonSchema(schemaJsonRepresentation)
+    return async (pathToType: string, pathToResolver: string) => {
+      try {
+        const schema = this.getSchemaByFilePath(pathToType)
+        const schemaJsonRepresentation = transform(schema)
+        const resolverContent = this.resolverContentByJsonSchema(schemaJsonRepresentation)
+        console.log('Writing resolvers to ' + pathToResolver + '...')
+        await writeToFile(pathToResolver, resolverContent)
+        console.log('Resolver file was created successfully!')
+      } catch (err) {
+        console.error('Error in generating resolver- ', err)
+      }
     }
   }
 
@@ -39,7 +48,7 @@ export class Resolver extends AbstractCommand {
     let resolverContent = resolverPrefix
     Object.entries(schemaDefinitions).forEach(([key, operation]: [string, Operation]) => {
       if (keysToGenerate.includes(key)) {
-        resolverContent += this.getTypeOperationContent(operation)
+        resolverContent += this.getTypeOperationContent(operation) + operationSuffix
       }
     })
     resolverContent += resolverSuffix
@@ -53,22 +62,22 @@ export class Resolver extends AbstractCommand {
       opStrRepresentation += this.getTypeOperationParamContent(key, operation)
     })
 
-    opStrRepresentation += operationSuffix
+    opStrRepresentation += operationFuntionsSuffix
     return opStrRepresentation
   }
 
   private getTypeOperationParamContent(key: string, operation: Operation): string {
-    let operationParamStr = '\t' + key
+    let operationParamStr = '\t\t' + key
     if (operation.title === 'Subscription') {
       operationParamStr +=
         operationPrefix +
-        '\t' +
         subscriptionSubscribeDefinition +
         gqlMethodSignature +
         functionOperationPrefix +
-        operationSuffix
+        '\t' +
+        operationFuntionsSuffix
     } else {
-      operationParamStr += gqlMethodSignature + gqlMethodReturns
+      operationParamStr += gqlMethodSignature + gqlMethodSuffix
     }
     return operationParamStr
   }
