@@ -100,7 +100,6 @@ export class Resolver extends AbstractCommand {
       const typeFileContent = await readFileContent(pathToType)
       const splittedBySchema = typeFileContent.split('`')
       if (splittedBySchema.length !== 3) {
-        //Splitted file is not separated by schema!
         return ''
       }
       return splittedBySchema[1]
