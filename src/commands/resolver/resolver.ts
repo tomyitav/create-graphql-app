@@ -1,5 +1,6 @@
 import { AbstractCommand } from '../abstract-command'
-import * as transform from 'graphql-json-schema'
+import * as transform_ from 'graphql-json-schema'
+const transform = transform_
 import { Operation, Schema } from './resolver-types'
 import {
   functionOperationPrefix,
