@@ -10,10 +10,13 @@ describe('Resolver command test', () => {
   let res: AbstractCommand
   const pathToType = path.join(__dirname, './test-schema.ts')
   const pathToActualResolver = path.join(__dirname, '../../output/actual/test-resolver.ts')
-  const pathToExpectedResolver = path.join(__dirname, '../../output/expected/test-resolver.ts')
+  const pathToExpectedResolver = path.join(
+    __dirname,
+    '../../output/expected/commands/resolver/test-resolver.ts'
+  )
   const pathToNonOverridenFile = path.join(
     __dirname,
-    '../../output/expected/test-not-overriden-by-resolver.ts'
+    '../../output/expected/commands/resolver/test-not-overriden-by-resolver.ts'
   )
   beforeAll(() => {
     res = new Resolver()
