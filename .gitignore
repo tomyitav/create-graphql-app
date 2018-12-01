@@ -6,7 +6,8 @@ coverage
 .vscode
 .idea
 dist
-test/output/actual
+test/output/actual/*
+!test/output/actual/.gitkeep
 compiled
 .awcache
 .rpt2_cache
