@@ -11,6 +11,10 @@ describe('Resolver command test', () => {
   const pathToType = path.join(__dirname, './test-schema.ts')
   const pathToActualResolver = path.join(__dirname, '../../output/actual/test-resolver.ts')
   const pathToExpectedResolver = path.join(__dirname, '../../output/expected/test-resolver.ts')
+  const pathToNonOverridenFile = path.join(
+    __dirname,
+    '../../output/expected/test-not-overriden-by-resolver.ts'
+  )
   beforeAll(() => {
     res = new Resolver()
   })
@@ -44,8 +48,20 @@ describe('Resolver command test', () => {
       .readFileSync(pathToActualResolver)
       .toString()
       .replace(/\s/g, '')
-    console.log('expected length- ', expectedContent.length)
-    console.log('actual length- ', actualContent.length)
-    expect(expectedContent === actualContent).toBeTruthy()
+    expect(actualContent).toEqual(expectedContent)
+  })
+
+  it('works if resolver command does not override existing file', async () => {
+    const actFunction = res.getAction()
+    await actFunction(pathToType, pathToNonOverridenFile)
+    const expectedContent = fs
+      .readFileSync(pathToExpectedResolver)
+      .toString()
+      .replace(/\s/g, '')
+    const actualContent = fs
+      .readFileSync(pathToNonOverridenFile)
+      .toString()
+      .replace(/\s/g, '')
+    expect(actualContent).not.toEqual(expectedContent)
   })
 })

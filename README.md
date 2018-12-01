@@ -25,3 +25,15 @@ Open shell in the desired folder for bootstrapping the server, and typed:
 
 The command will prompt available server seeds options. Choose the boilerplate project
 you want, and start coding! 
+
+### Generate server resolver files
+
+The server boilerplate code is designed as multi file schema definitions.
+Our recommended way for schema design is to create a type file for certain entity.
+Eventually, all entities schemas are merged.
+To generate a matching resolver file for type file, execute the command: 
+
+```gga r <type-file> <resolver file>```
+
+This will create a matching file. with all Query, Mutation and Subscription
+definitions.

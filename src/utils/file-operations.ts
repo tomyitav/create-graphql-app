@@ -11,3 +11,15 @@ export function writeToFile(pathToFile: string, content: string): Promise<void> 
     })
   })
 }
+
+export function fileExist(pathToFile: string): Promise<boolean> {
+  return new Promise(resolve => {
+    fs.stat(pathToFile, (err, stats) => {
+      if (err) {
+        resolve(false)
+      } else {
+        resolve(stats.isFile())
+      }
+    })
+  })
+}

@@ -13,7 +13,7 @@ import {
   subscriptionSubscribeDefinition,
   operationFuntionsSuffix
 } from './resolver-constants'
-import { writeToFile } from '../../utils/write-to-file'
+import { fileExist, writeToFile } from '../../utils/file-operations'
 
 export class Resolver extends AbstractCommand {
   public getName(): string {
@@ -23,6 +23,13 @@ export class Resolver extends AbstractCommand {
   public getAction(): (...args: any[]) => void {
     return async (pathToType: string, pathToResolver: string) => {
       try {
+        const resolverExists = await fileExist(pathToResolver)
+        if (resolverExists) {
+          console.log(
+            'Resolver file already exists. please select a different path or remove the current file...'
+          )
+          return
+        }
         const schema = this.getSchemaByFilePath(pathToType)
         const schemaJsonRepresentation = transform(schema)
         const resolverContent = this.resolverContentByJsonSchema(schemaJsonRepresentation)
