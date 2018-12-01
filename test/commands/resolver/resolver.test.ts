@@ -8,14 +8,17 @@ import * as fs from 'fs'
 
 describe('Resolver command test', () => {
   let res: AbstractCommand
-  const pathToActualResolver = path.join(__dirname, '../../output/actual/test-resolver.ts')
   const pathToType = path.join(__dirname, './test-schema.ts')
+  const pathToActualResolver = path.join(__dirname, '../../output/actual/test-resolver.ts')
+  const pathToExpectedResolver = path.join(__dirname, '../../output/expected/test-resolver.ts')
   beforeAll(() => {
     res = new Resolver()
   })
 
   afterEach(() => {
-    fs.unlinkSync(pathToActualResolver)
+    if (fs.existsSync(pathToActualResolver)) {
+      fs.unlinkSync(pathToActualResolver)
+    }
   })
 
   it('works if action returns a function', () => {
@@ -28,5 +31,21 @@ describe('Resolver command test', () => {
     await actFunction(pathToType, pathToActualResolver)
     const resolverFileExist: boolean = fs.existsSync(pathToActualResolver)
     expect(resolverFileExist).toBeTruthy()
+  })
+
+  it('works if resolver file is identical to expected file', async () => {
+    const actFunction = res.getAction()
+    await actFunction(pathToType, pathToActualResolver)
+    const expectedContent = fs
+      .readFileSync(pathToExpectedResolver)
+      .toString()
+      .replace(/\s/g, '')
+    const actualContent = fs
+      .readFileSync(pathToActualResolver)
+      .toString()
+      .replace(/\s/g, '')
+    console.log('expected length- ', expectedContent.length)
+    console.log('actual length- ', actualContent.length)
+    expect(expectedContent === actualContent).toBeTruthy()
   })
 })
