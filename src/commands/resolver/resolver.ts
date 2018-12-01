@@ -1,4 +1,5 @@
 import { AbstractCommand } from '../abstract-command'
+import * as path from 'path'
 import * as transform_ from 'graphql-json-schema'
 const transform = transform_
 import { Operation, Schema } from './resolver-types'
@@ -14,7 +15,7 @@ import {
   subscriptionSubscribeDefinition,
   operationFuntionsSuffix
 } from './resolver-constants'
-import { fileExist, writeToFile } from '../../utils/file-operations'
+import { fileExist, readFileContent, writeToFile } from '../../utils/file-operations'
 
 export class Resolver extends AbstractCommand {
   public getName(): string {
@@ -31,7 +32,11 @@ export class Resolver extends AbstractCommand {
           )
           return
         }
-        const schema = this.getSchemaByFilePath(pathToType)
+        const schema = await this.getSchemaByFilePath(pathToType)
+        if (!schema || schema === '') {
+          console.log('Failed to read schema, exiting...')
+          return
+        }
         const schemaJsonRepresentation = transform(schema)
         const resolverContent = this.resolverContentByJsonSchema(schemaJsonRepresentation)
         console.log('Writing resolvers to ' + pathToResolver + '...')
@@ -90,8 +95,18 @@ export class Resolver extends AbstractCommand {
     return operationParamStr
   }
 
-  private getSchemaByFilePath(pathToType: string): string {
-    const schemaValue = require(pathToType)
-    return schemaValue.default
+  private async getSchemaByFilePath(pathToType: string): Promise<string> {
+    try {
+      const typeFileContent = await readFileContent(pathToType)
+      const splittedBySchema = typeFileContent.split('`')
+      if (splittedBySchema.length !== 3) {
+        //Splitted file is not separated by schema!
+        return ''
+      }
+      return splittedBySchema[1]
+    } catch (err) {
+      console.error('Got error in reading type file- ', err)
+      return ''
+    }
   }
 }

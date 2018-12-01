@@ -23,3 +23,15 @@ export function fileExist(pathToFile: string): Promise<boolean> {
     })
   })
 }
+
+export function readFileContent(pathToFile: string): Promise<string> {
+  return new Promise((resolve, reject) => {
+    fs.readFile(pathToFile, (err, data) => {
+      if (err) {
+        reject(err)
+      } else {
+        resolve(data.toString())
+      }
+    })
+  })
+}

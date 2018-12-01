@@ -1,23 +1,16 @@
-/**
- * Dummy test
- */
 import { AbstractCommand } from '../../../src/commands/abstract-command'
 import { Resolver } from '../../../src/commands/resolver/resolver'
-import * as path from 'path'
 import * as fs from 'fs'
 
 describe('Resolver command test', () => {
+  // const mockedProcess = process as jest.Mocked<typeof process>
   let res: AbstractCommand
-  const pathToType = path.join(__dirname, './test-schema.ts')
-  const pathToActualResolver = path.join(__dirname, '../../output/actual/test-resolver.ts')
-  const pathToExpectedResolver = path.join(
-    __dirname,
-    '../../output/expected/commands/resolver/test-resolver.ts'
-  )
-  const pathToNonOverridenFile = path.join(
-    __dirname,
-    '../../output/expected/commands/resolver/test-not-overriden-by-resolver.ts'
-  )
+  const pathToType = './test/commands/resolver/test-schema.ts'
+  const pathToActualResolver = './test/output/actual/test-resolver.ts'
+  const pathToExpectedResolver = './test/output/expected/commands/resolver/test-resolver.ts'
+  const pathToNonOverridenFile =
+    './test/output/expected/commands/resolver/test-not-overriden-by-resolver.ts'
+
   beforeAll(() => {
     res = new Resolver()
   })
