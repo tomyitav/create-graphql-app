@@ -35,5 +35,5 @@ To generate a matching resolver file for type file, execute the command:
 
 ```gga r <type-file> <resolver file>```
 
-This will create a matching file. with all Query, Mutation and Subscription
+This will create a matching file, with all Query, Mutation and Subscription
 definitions.
