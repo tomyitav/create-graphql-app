@@ -2,7 +2,7 @@ import { AbstractCommand } from '../../../src/commands/abstract-command'
 import { Init } from '../../../src/commands/init'
 import * as fs from 'fs'
 import * as inquirer from 'inquirer'
-import * as rimraf from 'rimraf'
+import * as fse from 'fs-extra'
 import * as path from 'path'
 
 jest.mock('inquirer')
@@ -19,7 +19,9 @@ describe('Init command test', () => {
 
   afterEach(() => {
     if (fs.existsSync(absoluteProcessDir)) {
-      rimraf.sync(absoluteProcessDir)
+      fse.remove(absoluteProcessDir, err => {
+        console.log('Could not remove cloned dir. On windows desktops, remove it manually...', err)
+      })
     }
   })
 
@@ -28,12 +30,16 @@ describe('Init command test', () => {
     expect(act).toBeInstanceOf(Function)
   })
 
-  it.only('works if directory is cloned after applying init', async () => {
+  it('works if directory is cloned after applying init', async () => {
     jest.setTimeout(180000)
     mockedInquirer.prompt.mockReturnValue({ seedName: 'graphql-server-typed' })
     const actFunction = init.getAction()
     await actFunction(pathToProjectDir)
     const projectFolderExists: boolean = fs.lstatSync(absoluteProcessDir).isDirectory()
+    const projectNodeModulesExists: boolean = fs
+      .lstatSync(path.join(absoluteProcessDir, 'node_modules'))
+      .isDirectory()
     expect(projectFolderExists).toBeTruthy()
+    expect(projectNodeModulesExists).toBeTruthy()
   })
 })

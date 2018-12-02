@@ -104,6 +104,7 @@
     "@commitlint/config-conventional": "^7.1.2",
     "@types/commander": "^2.12.2",
     "@types/cross-spawn": "^6.0.0",
+    "@types/fs-extra": "^5.0.4",
     "@types/inquirer": "0.0.43",
     "@types/jest": "^23.3.2",
     "@types/node": "^10.11.0",
@@ -142,6 +143,7 @@
   "dependencies": {
     "commander": "^2.19.0",
     "cross-spawn": "^6.0.5",
+    "fs-extra": "^7.0.1",
     "graphql-json-schema": "^0.1.2",
     "inquirer": "^6.2.0"
   }
