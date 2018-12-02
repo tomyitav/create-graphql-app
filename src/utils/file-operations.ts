@@ -12,7 +12,7 @@ export function writeToFile(pathToFile: string, content: string): Promise<void> 
   })
 }
 
-export function fileExist(pathToFile: string): Promise<boolean> {
+export function fileExists(pathToFile: string): Promise<boolean> {
   return new Promise(resolve => {
     fs.stat(pathToFile, (err, stats) => {
       if (err) {

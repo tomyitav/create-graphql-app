@@ -15,7 +15,7 @@ import {
   subscriptionSubscribeDefinition,
   operationFuntionsSuffix
 } from './resolver-constants'
-import { fileExist, readFileContent, writeToFile } from '../../utils/file-operations'
+import { fileExists, readFileContent, writeToFile } from '../../utils/file-operations'
 
 export class Resolver extends AbstractCommand {
   public getName(): string {
@@ -25,7 +25,7 @@ export class Resolver extends AbstractCommand {
   public getAction(): (...args: any[]) => void {
     return async (pathToType: string, pathToResolver: string) => {
       try {
-        const resolverExists = await fileExist(pathToResolver)
+        const resolverExists = await fileExists(pathToResolver)
         if (resolverExists) {
           console.log(
             'Resolver file already exists. please select a different path or remove the current file...'

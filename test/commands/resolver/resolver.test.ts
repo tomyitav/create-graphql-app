@@ -3,7 +3,6 @@ import { Resolver } from '../../../src/commands/resolver/resolver'
 import * as fs from 'fs'
 
 describe('Resolver command test', () => {
-  // const mockedProcess = process as jest.Mocked<typeof process>
   let res: AbstractCommand
   const pathToType = './test/commands/resolver/test-schema.ts'
   const pathToActualResolver = './test/output/actual/test-resolver.ts'
