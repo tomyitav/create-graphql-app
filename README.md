@@ -37,3 +37,7 @@ To generate a matching resolver file for type file, execute the command:
 
 This will create a matching file, with all Query, Mutation and Subscription
 definitions.
+
+### Extended documentation
+
+Please check out the [extended documentation](https://tomyitav.github.io/generate-graphql-app) for more information
