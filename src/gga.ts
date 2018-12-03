@@ -2,10 +2,11 @@
 
 import * as program from 'commander'
 import allCommands from './commands/all-commands'
-
 require('pkginfo')(module, 'version')
 
-program.version(module.exports.version).description('Cli tool for bootstrapping production grade GraphQL server')
+program
+  .version(module.exports.version)
+  .description('Cli tool for bootstrapping production grade GraphQL server')
 
 for (let command of allCommands) {
   program
