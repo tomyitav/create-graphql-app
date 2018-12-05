@@ -3,8 +3,7 @@ import { Resolver } from '../../../src/commands/resolver/resolver'
 import * as fs from 'fs'
 import * as fse from 'fs-extra'
 
-//TODO - remove only
-describe.only('Resolver command test', () => {
+describe('Resolver command test', () => {
   let res: AbstractCommand
   const pathToType = './test/commands/resolver/test-schema.ts'
   const pathToActualResolver = './test/output/actual/test-resolver.ts'
@@ -41,7 +40,7 @@ describe.only('Resolver command test', () => {
     expect(act).toBeInstanceOf(Function)
   })
 
-  it.only('works if resolver file was generated', async () => {
+  it('works if resolver file was generated', async () => {
     const actFunction = res.getAction()
     await actFunction(pathToType, pathToActualResolver)
     const resolverFileExist: boolean = fs.existsSync(pathToActualResolver)
@@ -68,20 +67,6 @@ describe.only('Resolver command test', () => {
       .replace(/\s/g, '')
     expect(actualContent).toEqual(expectedContent)
   })
-
-  // it('works if resolver file is in dir and identical to expected', async () => {
-  //   const actFunction = res.getAction()
-  //   await actFunction(pathToType, pathToDirectoryActualResolver)
-  //   const expectedContent = fs
-  //     .readFileSync(pathToExpectedResolver)
-  //     .toString()
-  //     .replace(/\s/g, '')
-  //   const actualContent = fs
-  //     .readFileSync(pathToDirectoryActualResolver)
-  //     .toString()
-  //     .replace(/\s/g, '')
-  //   expect(actualContent).toEqual(expectedContent)
-  // })
 
   it('works if resolver command does not override existing file', async () => {
     const actFunction = res.getAction()
