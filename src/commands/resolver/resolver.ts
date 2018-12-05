@@ -1,19 +1,18 @@
 import { AbstractCommand } from '../abstract-command'
-import * as path from 'path'
 import * as transform_ from 'graphql-json-schema'
 const transform = transform_
 import { Operation, Schema } from './resolver-types'
 import {
   functionOperationPrefix,
-  gqlMethodSuffix,
   gqlMethodSignature,
+  gqlMethodSuffix,
   keysToGenerate,
+  operationFuntionsSuffix,
   operationPrefix,
   operationSuffix,
   resolverPrefix,
   resolverSuffix,
-  subscriptionSubscribeDefinition,
-  operationFuntionsSuffix
+  subscriptionSubscribeDefinition
 } from './resolver-constants'
 import { fileExists, readFileContent, writeToFile } from '../../utils/file-operations'
 
