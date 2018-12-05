@@ -1,13 +1,28 @@
 import * as fs from 'fs'
+import * as path from 'path'
+import * as fse from 'fs-extra'
+
+const allowedFileExtensions = ['.ts']
 
 export function writeToFile(pathToFile: string, content: string): Promise<void> {
   return new Promise((resolve, reject) => {
-    fs.writeFile(pathToFile, content, err => {
+    const pathProps = path.parse(pathToFile)
+    if (!allowedFileExtensions.includes(pathProps.ext)) {
+      reject('Illegal file extension.. only ' + allowedFileExtensions + ' extensions are allowed')
+      return
+    }
+    fse.ensureDir(pathProps.dir, err => {
       if (err) {
         reject(err)
-      } else {
-        resolve()
+        return
       }
+      fs.writeFile(pathToFile, content, err => {
+        if (err) {
+          reject(err)
+        } else {
+          resolve()
+        }
+      })
     })
   })
 }
