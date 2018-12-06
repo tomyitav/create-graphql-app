@@ -23,6 +23,7 @@ export class Deploy extends AbstractCommand {
         const pkgJsonFileExist = await fileExists(path.join(pathToAppend, 'package.json'))
         if (!pkgJsonFileExist) {
           console.error('No package.json file found, exiting...')
+          return
         }
         console.log('Deploying project to production...')
         if (pathToAppend !== '') {
