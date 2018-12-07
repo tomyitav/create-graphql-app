@@ -1,0 +1,12 @@
+{
+  "name": "packag-json-example",
+  "version": "1.0.0",
+  "description": "simple package json example",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+	"deploy": "echo \"Deploy command will be executed\" "
+  },
+  "author": "",
+  "license": "ISC"
+}
