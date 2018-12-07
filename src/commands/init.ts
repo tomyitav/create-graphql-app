@@ -1,6 +1,7 @@
 import { AbstractCommand } from './abstract-command'
 import * as inquirer from 'inquirer'
 import { shell } from '../utils/shell'
+import logger from '../utils/logger'
 
 const questions = [
   {
@@ -29,12 +30,12 @@ export class Init extends AbstractCommand {
       try {
         const answer: any = await inquirer.prompt(questions)
         await shell(this.getCloneCommand(answer.seedName, projectName))
-        console.log('Project cloned, installing dependencies...')
+        logger.info('Project cloned, installing dependencies...')
         process.chdir(projectName)
         await shell(this.getInstallCommand())
-        console.log('Dependencies installed successfully')
+        logger.info('Dependencies installed successfully')
       } catch (err) {
-        console.error('Got error in init command- ', err)
+        logger.error('Got error in init command- ', err)
       }
     }
   }
