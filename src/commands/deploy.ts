@@ -25,7 +25,7 @@ export class Deploy extends AbstractCommand {
           console.error('No package.json file found, exiting...')
           return
         }
-        console.log('Deploying project to production...')
+        console.log('Deploying server to production...')
         if (pathToAppend !== '') {
           process.chdir(pathToAppend)
         }

@@ -38,6 +38,14 @@ To generate a matching resolver file for type file, execute the command:
 This will create a matching file, with all Query, Mutation and Subscription
 definitions.
 
+### Deploy server to production
+
+Inside the project directory, type: 
+
+```gga d```
+
+This will run the server *deploy* script, and will move the server to production! :rocket:
+
 ### Extended documentation
 
 Please check out the [extended documentation](https://tomyitav.github.io/generate-graphql-app) for more information
