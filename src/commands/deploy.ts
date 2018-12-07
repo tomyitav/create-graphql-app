@@ -2,6 +2,7 @@ import { AbstractCommand } from './abstract-command'
 import { shell } from '../utils/shell'
 import { fileExists } from '../utils/file-operations'
 import * as path from 'path'
+import logger from '../utils/logger'
 
 export class Deploy extends AbstractCommand {
   public getName(): string {
@@ -22,17 +23,17 @@ export class Deploy extends AbstractCommand {
         const pathToAppend = projectPath ? projectPath : ''
         const pkgJsonFileExist = await fileExists(path.join(pathToAppend, 'package.json'))
         if (!pkgJsonFileExist) {
-          console.error('No package.json file found, exiting...')
+          logger.error('No package.json file found, exiting...')
           return
         }
-        console.log('Deploying server to production...')
+        logger.info('Deploying server to production...')
         if (pathToAppend !== '') {
           process.chdir(pathToAppend)
         }
         await shell(this.getDeployCommand())
-        console.log('Project successfully deployed!')
+        logger.info('Project successfully deployed!')
       } catch (err) {
-        console.error('Got error in deploy command- ', err)
+        logger.error('Got error in deploy command- ', err)
       }
     }
   }

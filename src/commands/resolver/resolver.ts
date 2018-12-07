@@ -15,6 +15,7 @@ import {
   subscriptionSubscribeDefinition
 } from './resolver-constants'
 import { fileExists, readFileContent, writeToFile } from '../../utils/file-operations'
+import logger from '../../utils/logger'
 
 export class Resolver extends AbstractCommand {
   public getName(): string {
@@ -26,23 +27,23 @@ export class Resolver extends AbstractCommand {
       try {
         const resolverExists = await fileExists(pathToResolver)
         if (resolverExists) {
-          console.log(
+          logger.warn(
             'Resolver file already exists. please select a different path or remove the current file...'
           )
           return
         }
         const schema = await this.getSchemaByFilePath(pathToType)
         if (!schema || schema === '') {
-          console.log('Failed to read schema, exiting...')
+          logger.error('Failed to read schema, exiting...')
           return
         }
         const schemaJsonRepresentation = transform(schema)
         const resolverContent = this.resolverContentByJsonSchema(schemaJsonRepresentation)
-        console.log('Writing resolvers to ' + pathToResolver + '...')
+        logger.info('Writing resolvers to ' + pathToResolver + '...')
         await writeToFile(pathToResolver, resolverContent)
-        console.log('Resolver file was created successfully!')
+        logger.info('Resolver file was created successfully!')
       } catch (err) {
-        console.error('Error in generating resolver- ', err)
+        logger.error('Error in generating resolver- ', err)
       }
     }
   }
@@ -103,7 +104,7 @@ export class Resolver extends AbstractCommand {
       }
       return splittedBySchema[1]
     } catch (err) {
-      console.error('Got error in reading type file- ', err)
+      logger.error('Got error in reading type file- ', err)
       return ''
     }
   }
