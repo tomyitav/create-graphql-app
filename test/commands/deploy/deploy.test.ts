@@ -2,8 +2,7 @@ import { AbstractCommand } from '../../../src/commands/abstract-command'
 import { Deploy } from '../../../src/commands/deploy'
 import * as path from 'path'
 
-//TODO - remove only
-describe.only('test for deploy command', () => {
+describe('test for deploy command', () => {
   let deploy: AbstractCommand
   const pathToProjectDir = './test/commands/deploy/inner-dir'
   const pathToProjectNoPackage = './test/commands/deploy/inner-dir-no-package'
