@@ -33,7 +33,7 @@ export class Deploy extends AbstractCommand {
         await shell(this.getDeployCommand())
         logger.info('Project successfully deployed!')
       } catch (err) {
-        logger.error('Got error in deploy command- ', err)
+        logger.error(`Got error in deploy command- ${err}`)
       }
     }
   }

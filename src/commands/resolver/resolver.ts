@@ -43,7 +43,7 @@ export class Resolver extends AbstractCommand {
         await writeToFile(pathToResolver, resolverContent)
         logger.info('Resolver file was created successfully!')
       } catch (err) {
-        logger.error('Error in generating resolver- ', err)
+        logger.error(`Error in generating resolver- ${err}`)
       }
     }
   }
@@ -104,7 +104,7 @@ export class Resolver extends AbstractCommand {
       }
       return splittedBySchema[1]
     } catch (err) {
-      logger.error('Got error in reading type file- ', err)
+      logger.error(`Got error in reading type file- ${err}`)
       return ''
     }
   }
