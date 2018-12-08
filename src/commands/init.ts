@@ -35,7 +35,7 @@ export class Init extends AbstractCommand {
         await shell(this.getInstallCommand())
         logger.info('Dependencies installed successfully')
       } catch (err) {
-        logger.error('Got error in init command- ', err)
+        logger.error(`Got error in init command- ${err}`)
       }
     }
   }
