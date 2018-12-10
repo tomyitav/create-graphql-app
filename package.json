@@ -33,9 +33,9 @@
     "prebuild": "rimraf dist",
     "build": "tsc --module commonjs && rollup -c rollup.config.ts && typedoc --out docs --target es6 --theme minimal --mode file src",
     "start": "rollup -c rollup.config.ts",
-    "test": "jest",
+    "test": "jest --coverage",
     "test:watch": "jest --watch --verbose false",
-    "test:prod": "npm run lint && npm run test",
+    "test:prod": "npm run lint && npm run test -- --no-cache",
     "deploy-docs": "ts-node tools/gh-pages-publish",
     "report-coverage": "cat ./coverage/lcov.info | coveralls",
     "commit": "git-cz",
@@ -76,15 +76,18 @@
     ],
     "coverageThreshold": {
       "global": {
-        "branches": 90,
-        "functions": 95,
-        "lines": 95,
-        "statements": 95
+        "branches": 80,
+        "functions": 90,
+        "lines": 85,
+        "statements": 85
       }
     },
-    "collectCoverage": false,
+    "collectCoverage": true,
     "collectCoverageFrom": [
-      "src/*.{js,ts}"
+      "src/**/*.js",
+      "src/**/*.ts",
+      "!src/gga.ts",
+      "!src/declarations.d.ts"
     ]
   },
   "prettier": {
