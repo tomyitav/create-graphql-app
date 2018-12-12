@@ -1,13 +1,10 @@
 import { AbstractCommand } from '../../../src/commands/abstract-command'
 import { Deploy } from '../../../src/commands/deploy'
-import * as path from 'path'
 
 describe('test for deploy command', () => {
   let deploy: AbstractCommand
   const pathToProjectDir = './test/commands/deploy/inner-dir'
   const pathToProjectNoPackage = './test/commands/deploy/inner-dir-no-package'
-  const absoluteProcessDir = path.join(process.cwd(), pathToProjectDir)
-  const absoluteProcessDirNoPackage = path.join(process.cwd(), pathToProjectNoPackage)
 
   beforeAll(() => {
     deploy = new Deploy()
@@ -29,7 +26,7 @@ describe('test for deploy command', () => {
   it('works if deploy command is executed with directory path', async () => {
     const act = deploy.getAction()
     const spy = jest.spyOn(deploy as any, 'getDeployCommand')
-    await act(absoluteProcessDir)
+    await act(pathToProjectDir)
     expect(spy).toHaveBeenCalled()
     spy.mockRestore()
   })
@@ -37,7 +34,7 @@ describe('test for deploy command', () => {
   it('works if deploy command is not executed when no package.json', async () => {
     const act = deploy.getAction()
     const spy = jest.spyOn(deploy as any, 'getDeployCommand')
-    await act(absoluteProcessDirNoPackage)
+    await act(pathToProjectNoPackage)
     expect(spy).not.toHaveBeenCalled()
     spy.mockRestore()
   })
