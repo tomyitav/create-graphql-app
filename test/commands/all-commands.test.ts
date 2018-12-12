@@ -6,6 +6,7 @@ describe('test all commands file', () => {
     for (let command of allCommands) {
       expect(command.getAlias().length > 0).toBeTruthy()
       expect(command.getDescription().length > 0).toBeTruthy()
+      expect(command.getName().length > 0).toBeTruthy()
       expect(command.getAction()).toBeInstanceOf(Function)
     }
   })
