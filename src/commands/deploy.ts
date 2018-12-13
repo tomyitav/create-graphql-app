@@ -21,7 +21,10 @@ export class Deploy extends AbstractCommand {
     return async (projectPath: string) => {
       try {
         const pathToAppend = projectPath ? projectPath : ''
-        const pkgJsonFileExist = await fileExists(path.join(pathToAppend, 'package.json'))
+        const pkgJsonFile = path.join(pathToAppend, 'package.json')
+        logger.info('Logging path to package.json for debugging- ' + pkgJsonFile)
+        logger.info('Logging cwd for debugging- ' + process.cwd())
+        const pkgJsonFileExist = await fileExists(pkgJsonFile)
         if (!pkgJsonFileExist) {
           logger.error('No package.json file found, exiting...')
           return
