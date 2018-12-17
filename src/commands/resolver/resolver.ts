@@ -9,7 +9,6 @@ import {
   keysToGenerate,
   operationFuntionsSuffix,
   operationPrefix,
-  operationSuffix,
   resolverPrefix,
   resolverSuffix,
   subscriptionSubscribeDefinition
@@ -61,7 +60,7 @@ export class Resolver extends AbstractCommand {
     let resolverContent = resolverPrefix
     Object.entries(schemaDefinitions).forEach(([key, operation]: [string, Operation]) => {
       if (keysToGenerate.includes(key)) {
-        resolverContent += this.getTypeOperationContent(operation) + operationSuffix
+        resolverContent += this.getTypeOperationContent(operation)
       }
     })
     resolverContent += resolverSuffix

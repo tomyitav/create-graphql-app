@@ -5,7 +5,8 @@ import * as fse from 'fs-extra'
 
 describe('Resolver command test', () => {
   let res: AbstractCommand
-  const pathToType = './test/commands/resolver/test-schema.ts'
+  const pathToType = './test/commands/resolver/legal-schemas/test-schema1.ts'
+  const pathToIllegalSchema1 = './test/commands/resolver/illegal-schemas/illegal-schema1.ts'
   const pathToActualResolver = './test/output/actual/test-resolver.ts'
   const pathToDirectoryActualResolver = './test/output/actual/non/existing/dir/test-resolver.ts'
   const resolverDirLocation = './test/output/actual/non'
@@ -40,6 +41,13 @@ describe('Resolver command test', () => {
     expect(act).toBeInstanceOf(Function)
   })
 
+  it('works if resolver file was not generated for illegal schema 1', async () => {
+    const actFunction = res.getAction()
+    await actFunction(pathToIllegalSchema1, pathToActualResolver)
+    const resolverFileExist: boolean = fs.existsSync(pathToActualResolver)
+    expect(resolverFileExist).not.toBeTruthy()
+  })
+
   it('works if resolver file was generated', async () => {
     const actFunction = res.getAction()
     await actFunction(pathToType, pathToActualResolver)
@@ -54,7 +62,7 @@ describe('Resolver command test', () => {
     expect(resolverFileExist).toBeTruthy()
   })
 
-  it('works if resolver file is identical to expected file', async () => {
+  it.only('works if resolver file is identical to expected file', async () => {
     const actFunction = res.getAction()
     await actFunction(pathToType, pathToActualResolver)
     const expectedContent = fs

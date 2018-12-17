@@ -1,4 +1,7 @@
 {
+  "rules": {
+    "no-empty": false
+  },
   "extends": [
     "tslint-config-standard",
     "tslint-config-prettier"
