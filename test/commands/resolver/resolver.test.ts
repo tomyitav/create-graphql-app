@@ -5,11 +5,16 @@ import * as fse from 'fs-extra'
 
 describe('Resolver command test', () => {
   let res: AbstractCommand
-  const pathToType = './test/commands/resolver/test-schema.ts'
-  const pathToActualResolver = './test/output/actual/test-resolver.ts'
+  const pathToType1 = './test/commands/resolver/legal-schemas/test-schema1.ts'
+  const pathToTypeTweets = './test/commands/resolver/legal-schemas/tweet-test-schema.ts'
+  const pathToIllegalSchema1 = './test/commands/resolver/illegal-schemas/illegal-schema1.ts'
+  const pathToActualResolver1 = './test/output/actual/test-resolver.ts'
+  const pathToActualResolverTweets = './test/output/actual/tweets-test-resolver.ts'
   const pathToDirectoryActualResolver = './test/output/actual/non/existing/dir/test-resolver.ts'
   const resolverDirLocation = './test/output/actual/non'
-  const pathToExpectedResolver = './test/output/expected/commands/resolver/test-resolver.ts'
+  const pathToExpectedResolver1 = './test/output/expected/commands/resolver/test-resolver.ts'
+  const pathToExpectedResolverTweets =
+    './test/output/expected/commands/resolver/tweets-test-resolver.ts'
   const pathToNonOverridenFile =
     './test/output/expected/commands/resolver/test-not-overriden-by-resolver.ts'
 
@@ -18,8 +23,11 @@ describe('Resolver command test', () => {
   })
 
   afterEach(() => {
-    if (fs.existsSync(pathToActualResolver)) {
-      fs.unlinkSync(pathToActualResolver)
+    if (fs.existsSync(pathToActualResolver1)) {
+      fs.unlinkSync(pathToActualResolver1)
+    }
+    if (fs.existsSync(pathToActualResolverTweets)) {
+      fs.unlinkSync(pathToActualResolverTweets)
     }
     fs.stat(resolverDirLocation, (err, stats) => {
       if (!err) {
@@ -40,29 +48,57 @@ describe('Resolver command test', () => {
     expect(act).toBeInstanceOf(Function)
   })
 
-  it('works if resolver file was generated', async () => {
+  it('works if resolver file was not generated for illegal schema 1', async () => {
     const actFunction = res.getAction()
-    await actFunction(pathToType, pathToActualResolver)
-    const resolverFileExist: boolean = fs.existsSync(pathToActualResolver)
+    await actFunction(pathToIllegalSchema1, pathToActualResolver1)
+    const resolverFileExist: boolean = fs.existsSync(pathToActualResolver1)
+    expect(resolverFileExist).not.toBeTruthy()
+  })
+
+  it('works if resolver file was generated for test-schema-1', async () => {
+    const actFunction = res.getAction()
+    await actFunction(pathToType1, pathToActualResolver1)
+    const resolverFileExist: boolean = fs.existsSync(pathToActualResolver1)
+    expect(resolverFileExist).toBeTruthy()
+  })
+
+  it('works if resolver file was generated for tweet-test-schema', async () => {
+    const actFunction = res.getAction()
+    await actFunction(pathToTypeTweets, pathToActualResolverTweets)
+    const resolverFileExist: boolean = fs.existsSync(pathToActualResolverTweets)
     expect(resolverFileExist).toBeTruthy()
   })
 
   it('works if resolver file was generated in directory structure', async () => {
     const actFunction = res.getAction()
-    await actFunction(pathToType, pathToDirectoryActualResolver)
+    await actFunction(pathToType1, pathToDirectoryActualResolver)
     const resolverFileExist: boolean = fs.existsSync(pathToDirectoryActualResolver)
     expect(resolverFileExist).toBeTruthy()
   })
 
-  it('works if resolver file is identical to expected file', async () => {
+  it('works if resolver file is identical to expected file for test-schema1', async () => {
     const actFunction = res.getAction()
-    await actFunction(pathToType, pathToActualResolver)
+    await actFunction(pathToType1, pathToActualResolver1)
     const expectedContent = fs
-      .readFileSync(pathToExpectedResolver)
+      .readFileSync(pathToExpectedResolver1)
       .toString()
       .replace(/\s/g, '')
     const actualContent = fs
-      .readFileSync(pathToActualResolver)
+      .readFileSync(pathToActualResolver1)
+      .toString()
+      .replace(/\s/g, '')
+    expect(actualContent).toEqual(expectedContent)
+  })
+
+  it('works if resolver file is identical to expected file for tweets-test-schema', async () => {
+    const actFunction = res.getAction()
+    await actFunction(pathToTypeTweets, pathToActualResolverTweets)
+    const expectedContent = fs
+      .readFileSync(pathToExpectedResolverTweets)
+      .toString()
+      .replace(/\s/g, '')
+    const actualContent = fs
+      .readFileSync(pathToActualResolverTweets)
       .toString()
       .replace(/\s/g, '')
     expect(actualContent).toEqual(expectedContent)
@@ -70,9 +106,9 @@ describe('Resolver command test', () => {
 
   it('works if resolver command does not override existing file', async () => {
     const actFunction = res.getAction()
-    await actFunction(pathToType, pathToNonOverridenFile)
+    await actFunction(pathToType1, pathToNonOverridenFile)
     const expectedContent = fs
-      .readFileSync(pathToExpectedResolver)
+      .readFileSync(pathToExpectedResolver1)
       .toString()
       .replace(/\s/g, '')
     const actualContent = fs
