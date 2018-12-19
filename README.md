@@ -25,6 +25,8 @@ Please make sure you have Node.js version 8+, and type
 
 ```npm install -g generate-graphql-app```
 
+## CLI commands
+
 ### Init server command
 
 Open shell in the desired folder for bootstrapping the server, and typed:

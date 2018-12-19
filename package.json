@@ -31,7 +31,9 @@
   "scripts": {
     "lint": "tslint  --project tsconfig.json -t codeFrame 'src/**/*.ts' 'test/**/*.ts'",
     "prebuild": "rimraf dist",
+    "prebuild:win": "rimraf dist",
     "build": "tsc --module commonjs && rollup -c rollup.config.ts && typedoc --out docs --target es6 --theme minimal --mode file src",
+    "build:win": "tsc --module commonjs && node --max-old-space-size=4096 node_modules/rollup/bin/rollup -c rollup.config.ts && typedoc --out docs --target es6 --theme minimal --mode file src",
     "start": "rollup -c rollup.config.ts",
     "test": "jest --coverage",
     "test:watch": "jest --watch --verbose false",
@@ -76,7 +78,7 @@
     ],
     "coverageThreshold": {
       "global": {
-        "branches": 80,
+        "branches": 85,
         "functions": 95,
         "lines": 90,
         "statements": 90
