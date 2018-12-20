@@ -1,8 +1,12 @@
 import * as fs from 'fs'
 import * as path from 'path'
 import * as fse from 'fs-extra'
+import * as find_ from 'find'
+const find = find_
 
 const allowedFileExtensions = ['.ts']
+
+export type FileType = 'file' | 'dir'
 
 export function writeToFile(pathToFile: string, content: string): Promise<void> {
   return new Promise((resolve, reject) => {
@@ -34,6 +38,23 @@ export function fileExists(pathToFile: string): Promise<boolean> {
         resolve(false)
       } else {
         resolve(stats.isFile())
+      }
+    })
+  })
+}
+
+export function locateFile(
+  pattern: object,
+  rootPath: string,
+  fileType: FileType
+): Promise<string[]> {
+  const locatingFunction = fileType === 'file' ? find.file : find.dir
+  return new Promise((resolve, reject) => {
+    locatingFunction(pattern, rootPath, (results: string[]) => {
+      resolve(results)
+    }).error((err: any) => {
+      if (err) {
+        reject(err)
       }
     })
   })

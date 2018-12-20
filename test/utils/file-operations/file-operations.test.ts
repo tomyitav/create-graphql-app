@@ -1,4 +1,9 @@
-import { fileExists, readFileContent, writeToFile } from '../../../src/utils/file-operations'
+import {
+  fileExists,
+  locateFile,
+  readFileContent,
+  writeToFile
+} from '../../../src/utils/file-operations'
 import * as fs from 'fs'
 
 describe('test file-operation module functions', () => {
@@ -6,6 +11,7 @@ describe('test file-operation module functions', () => {
   const pathToNonExistingFile = './test/output/expected/utils/sample-file1.ts'
   const pathToFileToWrite = './test/output/actual/test-write-file.ts'
   const pathToIllegalExtension = './test/output/actual/test-write-file.t'
+  const pathToLocate = './test/output/expected/utils'
 
   afterEach(() => {
     if (fs.existsSync(pathToFileToWrite)) {
@@ -31,6 +37,17 @@ describe('test file-operation module functions', () => {
   it('works if managed to write file content', async () => {
     await writeToFile(pathToFileToWrite, 'Test writing content')
     expect(fs.existsSync(pathToFileToWrite)).toBeTruthy()
+  })
+
+  it('works if managed to locate directory content', async () => {
+    const dirsFound = await locateFile(/locate/, pathToLocate, 'dir')
+    expect(dirsFound.length).toBe(1)
+    const filesFound = await locateFile(/file-to-locate.ts/, pathToLocate, 'file')
+    expect(filesFound.length).toBe(1)
+    const dirsFoundNonExisting = await locateFile(/non-existing-dir/, pathToLocate, 'dir')
+    expect(dirsFoundNonExisting.length).toBe(0)
+    const filesFoundNonExisting = await locateFile(/non-existing-file.ts/, pathToLocate, 'file')
+    expect(filesFoundNonExisting.length).toBe(0)
   })
 
   it('works if writing to file with wrong extension fails', () => {
