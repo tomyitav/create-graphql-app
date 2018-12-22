@@ -1,6 +1,11 @@
 import { AbstractCommand, CommandOptions } from '../abstract-command'
-import { locateFile, writeToFile } from '../../utils/file-operations'
-import { serviceFilePrefix, serviceFileSuffix, servicePattern } from './service-files-constants'
+import { fileExists, locateFile, writeToFile } from '../../utils/file-operations'
+import {
+  serviceFileNameSuffix,
+  serviceFilePrefix,
+  serviceFileSuffix,
+  servicePattern
+} from './service-files-constants'
 import * as path from 'path'
 import { startCase } from 'lodash'
 import logger from '../../utils/logger'
@@ -48,9 +53,14 @@ export class Service extends AbstractCommand {
         return
       } else {
         const joinedPathToService = path.join(pathToServicesDir[0], servicePath)
-        logger.info('Generating service file...')
-        await writeToFile(joinedPathToService, this.getServiceFileContent(servicePath))
-        logger.info('Service file was added to- ' + joinedPathToService)
+        const serviceFileExists = await fileExists(joinedPathToService)
+        if (serviceFileExists) {
+          logger.warn('Service file already exists. Please select a different location')
+        } else {
+          logger.info('Generating service file...')
+          await writeToFile(joinedPathToService, this.getServiceFileContent(servicePath))
+          logger.info('Service file was added to- ' + joinedPathToService)
+        }
       }
     } catch (err) {
       logger.error(`Failed to generate service- ${err}`)
@@ -63,6 +73,6 @@ export class Service extends AbstractCommand {
   }
 
   private getServiceClassName(servicePath: string) {
-    return startCase(path.parse(servicePath).base.split('.')[0])
+    return startCase(path.parse(servicePath).base.split('.')[0]) + serviceFileNameSuffix
   }
 }

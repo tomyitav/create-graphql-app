@@ -25,7 +25,12 @@ describe('test for service command', () => {
     const dirsInActual = listAllDirectories(pathToActualDirectory)
     for (let dir of dirsInActual) {
       fse.remove(path.join(pathToActualDirectory, dir), err => {
-        console.log('Could not remove cloned dir. On windows desktops, remove it manually...', err)
+        if (err) {
+          console.log(
+            'Could not remove cloned dir. On windows desktops, remove it manually...',
+            err
+          )
+        }
       })
     }
     process.chdir(__dirname)
@@ -58,5 +63,54 @@ describe('test for service command', () => {
       .toString()
       .replace(/\s/g, '')
     expect(actualContent).toEqual(expectedContent)
+  })
+
+  it('Should update files after service command action inner dir', async () => {
+    const actualDirToCreate = path.join(pathToActualDirectory, projectLegalFilesName)
+    fse.mkdirsSync(actualDirToCreate)
+    fse.copySync(absPathToProjectWithLegalFile, actualDirToCreate)
+    process.chdir(actualDirToCreate)
+    const act = service.getAction()
+    await act('/inner/dir/car.ts')
+    const pathToExpectedService = path.join(
+      pathToExpectedDirectory,
+      projectLegalFilesName,
+      'src/services/car.ts'
+    )
+    const pathToActualService = path.join(actualDirToCreate, 'src/services/inner/dir/car.ts')
+    const expectedContent = fs
+      .readFileSync(pathToExpectedService)
+      .toString()
+      .replace(/\s/g, '')
+    const actualContent = fs
+      .readFileSync(pathToActualService)
+      .toString()
+      .replace(/\s/g, '')
+    expect(actualContent).toEqual(expectedContent)
+  })
+
+  it('Should not override existing service file', async () => {
+    const pathToExpectedExistingServiceDir = path.join(
+      pathToExpectedDirectory,
+      'project-with-existing-service'
+    )
+    process.chdir(pathToExpectedExistingServiceDir)
+    const act = service.getAction()
+    await act('car.ts')
+    const pathToExistedService = path.join(pathToExpectedExistingServiceDir, 'src/services/car.ts')
+    const pathToExpectedServiceIfOverride = path.join(
+      pathToExpectedDirectory,
+      projectLegalFilesName,
+      'src/services/car.ts'
+    )
+    const expectedContent = fs
+      .readFileSync(pathToExistedService)
+      .toString()
+      .replace(/\s/g, '')
+    const actualContent = fs
+      .readFileSync(pathToExpectedServiceIfOverride)
+      .toString()
+      .replace(/\s/g, '')
+    expect(actualContent).not.toEqual(expectedContent)
   })
 })
