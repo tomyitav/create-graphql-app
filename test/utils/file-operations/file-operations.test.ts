@@ -4,14 +4,18 @@ import {
   readFileContent,
   writeToFile
 } from '../../../src/utils/file-operations'
+import * as path from 'path'
 import * as fs from 'fs'
 
 describe('test file-operation module functions', () => {
-  const pathToExpectedFile = './test/output/expected/utils/sample-file.ts'
-  const pathToNonExistingFile = './test/output/expected/utils/sample-file1.ts'
-  const pathToFileToWrite = './test/output/actual/test-write-file.ts'
-  const pathToIllegalExtension = './test/output/actual/test-write-file.t'
-  const pathToLocate = './test/output/expected/utils'
+  const pathToExpectedFile = path.join(__dirname, '../../output/expected/utils/sample-file.ts')
+  const pathToNonExistingFile = path.join(
+    __dirname,
+    '../../test/output/expected/utils/sample-file1.ts'
+  )
+  const pathToFileToWrite = path.join(__dirname, '../../output/actual/test-write-file.ts')
+  const pathToIllegalExtension = path.join(__dirname, '../../output/actual/test-write-file.t')
+  const pathToLocate = path.join(__dirname, '../../output/expected/utils')
 
   afterEach(() => {
     if (fs.existsSync(pathToFileToWrite)) {

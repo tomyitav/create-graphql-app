@@ -18,6 +18,7 @@ describe('test for service command', () => {
     fs.readdirSync(rootDir).filter(f => fs.statSync(path.join(rootDir, f)).isDirectory())
 
   beforeAll(() => {
+    process.chdir(__dirname)
     service = new Service()
   })
 
