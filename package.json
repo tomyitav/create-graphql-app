@@ -152,6 +152,7 @@
     "graphql-json-schema": "^0.1.2",
     "inquirer": "^6.2.0",
     "pkginfo": "^0.4.1",
+    "typescript-parser": "^2.6.1",
     "winston": "^3.1.0"
   }
 }
