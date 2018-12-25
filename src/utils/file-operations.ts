@@ -44,12 +44,15 @@ export function fileExists(pathToFile: string): Promise<boolean> {
 }
 
 export function locateFile(
-  pattern: object,
+  pattern: object | undefined,
   rootPath: string,
   fileType: FileType
 ): Promise<string[]> {
   const locatingFunction = fileType === 'file' ? find.file : find.dir
   return new Promise((resolve, reject) => {
+    if (!pattern) {
+      reject('Illegal pattern received in locate function')
+    }
     locatingFunction(pattern, rootPath, (results: string[]) => {
       resolve(results)
     }).error((err: any) => {

@@ -1,17 +1,31 @@
 import { AbstractCommand, CommandOptions } from '../abstract-command'
-import { fileExists, locateFile, writeToFile } from '../../utils/file-operations'
+import { fileExists, locateFile, readFileContent, writeToFile } from '../../utils/file-operations'
 import {
+  contextPattern,
+  injectorPattern,
   serviceFileNameSuffix,
   serviceFilePrefix,
   serviceFileSuffix,
   servicePattern
 } from './service-files-constants'
 import * as path from 'path'
-import { startCase } from 'lodash'
+import { startCase, get } from 'lodash'
 import logger from '../../utils/logger'
-import { TypescriptParser } from 'typescript-parser'
+import { File, TypescriptParser } from 'typescript-parser'
 
 type DefinitionFileType = 'injector' | 'context'
+interface DefinitionFileProps {
+  filePattern: object
+  declarationName: string
+}
+
+const fileDefinitionMap: Map<DefinitionFileType, DefinitionFileProps> = new Map<
+  DefinitionFileType,
+  DefinitionFileProps
+>([
+  ['injector', { filePattern: injectorPattern, declarationName: 'injector' }],
+  ['context', { filePattern: contextPattern, declarationName: 'getContext' }]
+])
 
 export class Service extends AbstractCommand {
   private parser: TypescriptParser
@@ -72,14 +86,14 @@ export class Service extends AbstractCommand {
         logger.warn('Service file already exists. Please select a different location')
       } else {
         logger.info('Generating service file...')
-        await writeToFile(joinedPathToService, this.getServiceFileContent(servicePath))
+        const serviceName = this.getServiceClassName(servicePath)
+        await writeToFile(joinedPathToService, this.getServiceFileContent(serviceName))
         logger.info('Service file was added to- ' + joinedPathToService)
       }
     }
   }
 
-  private getServiceFileContent(servicePath: string) {
-    const serviceClassName = this.getServiceClassName(servicePath)
+  private getServiceFileContent(serviceClassName: string) {
     return serviceFilePrefix + serviceClassName + serviceFileSuffix
   }
 
@@ -87,10 +101,51 @@ export class Service extends AbstractCommand {
     return startCase(path.parse(servicePath).base.split('.')[0]) + serviceFileNameSuffix
   }
 
-  private modifyServiceDefinitionFile(
+  private async modifyServiceDefinitionFile(
     pathToService: string,
+    serviceClassName: string,
     definitionFileType: DefinitionFileType
   ) {
-    const fileToLocate = definitionFileType + '.ts'
+    const filePatternToLocate = get(fileDefinitionMap.get(definitionFileType), 'filePattern')
+    const pathToDefFile = await locateFile(filePatternToLocate, './', 'file')
+    if (!pathToDefFile || pathToDefFile.length !== 1) {
+      logger.warn('Definition file for ' + definitionFileType + ' not found')
+    } else {
+      this.getModifiedFileContent(pathToService, serviceClassName, pathToDefFile[0])
+    }
+  }
+
+  private async getModifiedFileContent(
+    pathToService: string,
+    serviceClassName: string,
+    defFilePath: string
+  ) {
+    const defFileContent = await readFileContent(pathToService)
+    const parsedFile: File = await this.parser.parseFile(defFilePath, './')
+    const importsDefinitions = this.getImportDefinitions(
+      pathToService,
+      serviceClassName,
+      parsedFile,
+      defFileContent
+    )
+  }
+
+  private getImportDefinitions(
+    pathToService: string,
+    serviceClassName: string,
+    parsedFile: File,
+    defFileContent: string
+  ): string {
+    const importsEndChar = Array.isArray(parsedFile.imports)
+      ? parsedFile.imports[parsedFile.imports.length - 1].end
+      : 0
+    const originalImports = defFileContent.substring(0, importsEndChar)
+    return (
+      originalImports + '\n' + this.getServiceImportLine(pathToService, serviceClassName) + '\n'
+    )
+  }
+
+  private getServiceImportLine(pathToService: string, serviceClassName: string): string {
+    return 'import { ' + serviceClassName + " } from './" + pathToService.split('.')[0] + "'"
   }
 }
