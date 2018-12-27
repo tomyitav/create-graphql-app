@@ -157,7 +157,9 @@ export class Service extends AbstractCommand {
     serviceClassName: string,
     definitionFileType: DefinitionFileType
   ): Promise<void> {
-    const filePatternToLocate = get(fileDefinitionMap.get(definitionFileType), 'filePattern')
+    logger.info('Modifying definitions in ' + definitionFileType + ' file...')
+    const filePatternToLocate = (fileDefinitionMap.get(definitionFileType) as DefinitionFileProps)
+      .filePattern
     const pathToDefFile = await locateFile(filePatternToLocate, './', 'file')
     if (!pathToDefFile || pathToDefFile.length !== 1) {
       logger.warn('Definition file for ' + definitionFileType + ' not found')

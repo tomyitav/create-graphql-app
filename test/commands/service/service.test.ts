@@ -82,6 +82,22 @@ describe('test for service command', () => {
       .toString()
       .replace(/\s/g, '')
     expect(actualInjectorContent).toEqual(expectedInjectorContent)
+
+    const pathToExpectedContext = path.join(
+      pathToExpectedDirectory,
+      projectLegalFilesName,
+      'src/context.ts'
+    )
+    const pathToActualContext = path.join(actualDirToCreate, 'src/context.ts')
+    const expectedContextContent = fs
+      .readFileSync(pathToExpectedContext)
+      .toString()
+      .replace(/\s/g, '')
+    const actualContextContent = fs
+      .readFileSync(pathToActualContext)
+      .toString()
+      .replace(/\s/g, '')
+    expect(actualContextContent).toEqual(expectedContextContent)
   })
 
   it('Should update files after service command action inner dir', async () => {
