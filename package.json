@@ -34,6 +34,7 @@
     "prebuild:win": "rimraf dist",
     "build": "tsc --module commonjs && rollup -c rollup.config.ts && typedoc --out docs --target es6 --theme minimal --mode file src",
     "build:win": "tsc --module commonjs && node --max-old-space-size=4096 node_modules/rollup/bin/rollup -c rollup.config.ts && typedoc --out docs --target es6 --theme minimal --mode file src",
+    "tsc-only": "tsc --module commonjs",
     "start": "rollup -c rollup.config.ts",
     "test": "jest --coverage",
     "test:watch": "jest --watch --verbose false",
@@ -84,7 +85,7 @@
         "statements": 90
       }
     },
-    "collectCoverage": true,
+    "collectCoverage": false,
     "collectCoverageFrom": [
       "src/**/*.js",
       "src/**/*.ts",

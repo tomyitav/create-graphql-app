@@ -22,20 +22,20 @@ describe('test for service command', () => {
     service = new Service()
   })
 
-  afterEach(() => {
-    const dirsInActual = listAllDirectories(pathToActualDirectory)
-    for (let dir of dirsInActual) {
-      fse.remove(path.join(pathToActualDirectory, dir), err => {
-        if (err) {
-          console.log(
-            'Could not remove cloned dir. On windows desktops, remove it manually...',
-            err
-          )
-        }
-      })
-    }
-    process.chdir(__dirname)
-  })
+  // afterEach(() => {
+  //   const dirsInActual = listAllDirectories(pathToActualDirectory)
+  //   for (let dir of dirsInActual) {
+  //     fse.remove(path.join(pathToActualDirectory, dir), err => {
+  //       if (err) {
+  //         console.log(
+  //           'Could not remove cloned dir. On windows desktops, remove it manually...',
+  //           err
+  //         )
+  //       }
+  //     })
+  //   }
+  //   process.chdir(__dirname)
+  // })
 
   it('works if action returns a function', () => {
     const act = service.getAction()
@@ -43,6 +43,7 @@ describe('test for service command', () => {
   })
 
   it('Should update files after service command action', async () => {
+    jest.setTimeout(180000)
     const actualDirToCreate = path.join(pathToActualDirectory, projectLegalFilesName)
     fse.mkdirsSync(actualDirToCreate)
     fse.copySync(absPathToProjectWithLegalFile, actualDirToCreate)
@@ -63,7 +64,24 @@ describe('test for service command', () => {
       .readFileSync(pathToActualService)
       .toString()
       .replace(/\s/g, '')
+
     expect(actualContent).toEqual(expectedContent)
+
+    const pathToExpectedInjector = path.join(
+      pathToExpectedDirectory,
+      projectLegalFilesName,
+      'src/core/injector.ts'
+    )
+    const pathToActualInjector = path.join(actualDirToCreate, 'src/core/injector.ts')
+    const expectedInjectorContent = fs
+      .readFileSync(pathToExpectedInjector)
+      .toString()
+      .replace(/\s/g, '')
+    const actualInjectorContent = fs
+      .readFileSync(pathToActualInjector)
+      .toString()
+      .replace(/\s/g, '')
+    expect(actualInjectorContent).toEqual(expectedInjectorContent)
   })
 
   it('Should update files after service command action inner dir', async () => {
