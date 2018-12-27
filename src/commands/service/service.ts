@@ -184,8 +184,7 @@ export class Service extends AbstractCommand {
       pathToService,
       serviceClassName,
       parsedFile,
-      defFileContent,
-      definitionFileType
+      defFileContent
     )
     const {
       content: defContent,
@@ -209,8 +208,7 @@ export class Service extends AbstractCommand {
     pathToService: string,
     serviceClassName: string,
     parsedFile: File,
-    defFileContent: string,
-    definitionFileType: DefinitionFileType
+    defFileContent: string
   ): DeclarationInfo {
     const importsEndChar = Array.isArray(parsedFile.imports)
       ? parsedFile.imports[parsedFile.imports.length - 1].end || 0
