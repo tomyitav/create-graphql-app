@@ -16,4 +16,4 @@ export const injectorSignatureFn = (serviceName: string) => '  ' + serviceName +
 export const contextSignatureFn = (serviceName: string) =>
   '    ' + lowerFirst(serviceName) + ': ' + 'injector.get(' + serviceName + '),'
 export const contextInterfaceSignatureFn = (serviceName: string) =>
-  '  ' + lowerFirst(serviceName) + ' : ' + serviceName + ';'
+  '  ' + lowerFirst(serviceName) + ': ' + serviceName

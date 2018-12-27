@@ -3,10 +3,12 @@ import { Service } from '../../../src/commands/service/service'
 import * as path from 'path'
 import * as fs from 'fs'
 import * as fse from 'fs-extra'
+import { compareTestFilesByPaths } from '../../test-helpers'
 
 describe('test for service command', () => {
   let service: AbstractCommand
   const projectLegalFilesName = 'project-with-legal-files'
+  const projectLegalFilesNameInner = 'project-with-legal-files-inner-dir'
   const absPathToProjectWithLegalFile = path.join(
     __dirname,
     'projects-for-test',
@@ -22,20 +24,20 @@ describe('test for service command', () => {
     service = new Service()
   })
 
-  // afterEach(() => {
-  //   const dirsInActual = listAllDirectories(pathToActualDirectory)
-  //   for (let dir of dirsInActual) {
-  //     fse.remove(path.join(pathToActualDirectory, dir), err => {
-  //       if (err) {
-  //         console.log(
-  //           'Could not remove cloned dir. On windows desktops, remove it manually...',
-  //           err
-  //         )
-  //       }
-  //     })
-  //   }
-  //   process.chdir(__dirname)
-  // })
+  afterEach(() => {
+    const dirsInActual = listAllDirectories(pathToActualDirectory)
+    for (let dir of dirsInActual) {
+      fse.remove(path.join(pathToActualDirectory, dir), err => {
+        if (err) {
+          console.log(
+            'Could not remove cloned dir. On windows desktops, remove it manually...',
+            err
+          )
+        }
+      })
+    }
+    process.chdir(__dirname)
+  })
 
   it('works if action returns a function', () => {
     const act = service.getAction()
@@ -43,7 +45,6 @@ describe('test for service command', () => {
   })
 
   it('Should update files after service command action', async () => {
-    jest.setTimeout(180000)
     const actualDirToCreate = path.join(pathToActualDirectory, projectLegalFilesName)
     fse.mkdirsSync(actualDirToCreate)
     fse.copySync(absPathToProjectWithLegalFile, actualDirToCreate)
@@ -56,16 +57,7 @@ describe('test for service command', () => {
       'src/services/car.ts'
     )
     const pathToActualService = path.join(actualDirToCreate, 'src/services/car.ts')
-    const expectedContent = fs
-      .readFileSync(pathToExpectedService)
-      .toString()
-      .replace(/\s/g, '')
-    const actualContent = fs
-      .readFileSync(pathToActualService)
-      .toString()
-      .replace(/\s/g, '')
-
-    expect(actualContent).toEqual(expectedContent)
+    compareTestFilesByPaths(pathToActualService, pathToExpectedService)
 
     const pathToExpectedInjector = path.join(
       pathToExpectedDirectory,
@@ -73,15 +65,7 @@ describe('test for service command', () => {
       'src/core/injector.ts'
     )
     const pathToActualInjector = path.join(actualDirToCreate, 'src/core/injector.ts')
-    const expectedInjectorContent = fs
-      .readFileSync(pathToExpectedInjector)
-      .toString()
-      .replace(/\s/g, '')
-    const actualInjectorContent = fs
-      .readFileSync(pathToActualInjector)
-      .toString()
-      .replace(/\s/g, '')
-    expect(actualInjectorContent).toEqual(expectedInjectorContent)
+    compareTestFilesByPaths(pathToActualInjector, pathToExpectedInjector)
 
     const pathToExpectedContext = path.join(
       pathToExpectedDirectory,
@@ -89,15 +73,18 @@ describe('test for service command', () => {
       'src/context.ts'
     )
     const pathToActualContext = path.join(actualDirToCreate, 'src/context.ts')
-    const expectedContextContent = fs
-      .readFileSync(pathToExpectedContext)
-      .toString()
-      .replace(/\s/g, '')
-    const actualContextContent = fs
-      .readFileSync(pathToActualContext)
-      .toString()
-      .replace(/\s/g, '')
-    expect(actualContextContent).toEqual(expectedContextContent)
+    compareTestFilesByPaths(pathToActualContext, pathToExpectedContext)
+
+    const pathToExpectedContextInterface = path.join(
+      pathToExpectedDirectory,
+      projectLegalFilesName,
+      'src/interfaces/IAppContext.ts'
+    )
+    const pathToActualContextInterface = path.join(
+      actualDirToCreate,
+      'src/interfaces/IAppContext.ts'
+    )
+    compareTestFilesByPaths(pathToActualContextInterface, pathToExpectedContextInterface)
   })
 
   it('Should update files after service command action inner dir', async () => {
@@ -109,43 +96,27 @@ describe('test for service command', () => {
     await act('/inner/dir/car.ts')
     const pathToExpectedService = path.join(
       pathToExpectedDirectory,
-      projectLegalFilesName,
-      'src/services/car.ts'
+      projectLegalFilesNameInner,
+      'src/services/inner/dir/car.ts'
     )
     const pathToActualService = path.join(actualDirToCreate, 'src/services/inner/dir/car.ts')
-    const expectedContent = fs
-      .readFileSync(pathToExpectedService)
-      .toString()
-      .replace(/\s/g, '')
-    const actualContent = fs
-      .readFileSync(pathToActualService)
-      .toString()
-      .replace(/\s/g, '')
-    expect(actualContent).toEqual(expectedContent)
+    compareTestFilesByPaths(pathToActualService, pathToExpectedService)
   })
 
   it('Should not override existing service file', async () => {
-    const pathToExpectedExistingServiceDir = path.join(
+    const pathToExistingServiceDir = path.join(
       pathToExpectedDirectory,
       'project-with-existing-service'
     )
-    process.chdir(pathToExpectedExistingServiceDir)
+    process.chdir(pathToExistingServiceDir)
     const act = service.getAction()
     await act('car.ts')
-    const pathToExistedService = path.join(pathToExpectedExistingServiceDir, 'src/services/car.ts')
+    const pathToExistedService = path.join(pathToExistingServiceDir, 'src/services/car.ts')
     const pathToExpectedServiceIfOverride = path.join(
       pathToExpectedDirectory,
       projectLegalFilesName,
       'src/services/car.ts'
     )
-    const expectedContent = fs
-      .readFileSync(pathToExistedService)
-      .toString()
-      .replace(/\s/g, '')
-    const actualContent = fs
-      .readFileSync(pathToExpectedServiceIfOverride)
-      .toString()
-      .replace(/\s/g, '')
-    expect(actualContent).not.toEqual(expectedContent)
+    compareTestFilesByPaths(pathToExistedService, pathToExpectedServiceIfOverride, false)
   })
 })

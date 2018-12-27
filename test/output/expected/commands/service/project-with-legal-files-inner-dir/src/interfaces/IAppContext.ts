@@ -4,7 +4,7 @@ import { TrainsService } from '../services/trains/TrainsService'
 import { CarService } from '@src/services/car/CarService'
 
 export interface IAppContext {
-  carService: CarService
+  carService : CarService;
   pubsubManager: AbstractPubsubManager
   carsService: CarsService
   trainsService: TrainsService
