@@ -15,7 +15,6 @@ const injector: Injector = ReflectiveInjector.resolveAndCreate([
   { provide: AbstractSetting, useClass: Setting },
   { provide: AbstractPubsubManager, useClass: PubsubManager },
   Server,
-  CarsService,
   TrainsService
 ])
 

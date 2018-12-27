@@ -7,6 +7,7 @@ import {
   contextPattern,
   contextSignatureFn,
   contextStartSeparators,
+  importServicePrefix,
   injectorPattern,
   injectorSignatureFn,
   injectorStartSeparators,
@@ -216,34 +217,30 @@ export class Service extends AbstractCommand {
       : 0
     const originalImports = defFileContent.substring(0, importsEndChar)
     return {
-      content:
-        originalImports +
-        '\n' +
-        this.getServiceImportLine(pathToService, serviceClassName, definitionFileType) +
-        '\n',
+      content: originalImports + '\n' + this.getServiceImportLine(pathToService, serviceClassName),
       start: 0,
       end: importsEndChar
     }
   }
 
-  private getServiceImportLine(
-    pathToService: string,
-    serviceClassName: string,
-    definitionFileType: DefinitionFileType
-  ): string {
-    const directoryRelative = this.getDirectoryRelativeByDefFileType(definitionFileType)
+  private getServiceImportLine(pathToService: string, serviceClassName: string): string {
     return (
       'import { ' +
       serviceClassName +
       " } from '" +
-      directoryRelative +
-      pathToService.split('.')[0].replace('\\', '/') +
+      importServicePrefix +
+      this.locationInsideServicesDir(pathToService) +
+      '/' +
+      serviceClassName +
       "'"
     )
   }
 
-  private getDirectoryRelativeByDefFileType(definitionFileType: DefinitionFileType) {
-    return definitionFileType === 'context' ? './' : '../'
+  private locationInsideServicesDir(pathToService: string) {
+    return pathToService
+      .split('.')[0]
+      .split('services')[1]
+      .replace('\\', '/')
   }
 
   private getModifiedServiceDefinitions(
@@ -312,22 +309,18 @@ export class Service extends AbstractCommand {
     definitionToModify: string,
     definitionFileType: DefinitionFileType
   ): string {
-    const possibleStartSeparators: string[] = get(fileDefinitionMap, 'possibleStartSeparators')
-    const serviceSignatureFn = get(
-      fileDefinitionMap.get(definitionFileType),
-      'definitionSignatureFn'
-    )
-    if (serviceSignatureFn) {
-      for (let separator of possibleStartSeparators) {
-        const indexOfSeparator = definitionToModify.lastIndexOf(separator)
-        if (indexOfSeparator !== -1) {
-          return (
-            definitionToModify.substring(0, indexOfSeparator + separator.length) +
-            '\n' +
-            serviceSignatureFn(serviceClassName) +
-            definitionToModify.substring(indexOfSeparator + separator.length)
-          )
-        }
+    const definitionFileProps = fileDefinitionMap.get(definitionFileType) as DefinitionFileProps
+    const possibleStartSeparators: string[] = definitionFileProps.possibleStartSeparators
+    const serviceSignatureFn = definitionFileProps.definitionSignatureFn
+    for (let separator of possibleStartSeparators) {
+      const indexOfSeparator = definitionToModify.lastIndexOf(separator)
+      if (indexOfSeparator !== -1) {
+        return (
+          definitionToModify.substring(0, indexOfSeparator + separator.length) +
+          '\n' +
+          serviceSignatureFn(serviceClassName) +
+          definitionToModify.substring(indexOfSeparator + separator.length)
+        )
       }
     }
     return definitionToModify
