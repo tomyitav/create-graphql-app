@@ -17,9 +17,9 @@ import {
   servicePattern
 } from './service-files-constants'
 import * as path from 'path'
-import { startCase, get } from 'lodash'
+import * as _ from 'lodash'
 import logger from '../../utils/logger'
-import { Declaration, File, TypescriptParser } from 'typescript-parser'
+import * as parser from 'typescript-parser'
 
 type DefinitionFileType = 'injector' | 'context' | 'context-interface'
 interface DefinitionFileProps {
@@ -69,10 +69,10 @@ const fileDefinitionMap: Map<DefinitionFileType, DefinitionFileProps> = new Map<
 ])
 
 export class Service extends AbstractCommand {
-  private parser: TypescriptParser
+  private parser: parser.TypescriptParser
   constructor() {
     super()
-    this.parser = new TypescriptParser()
+    this.parser = new parser.TypescriptParser()
   }
 
   public getName(): string {
@@ -110,7 +110,7 @@ export class Service extends AbstractCommand {
       const pathToServicesDir = await locateFile(servicePattern, './', 'dir')
       if (!pathToServicesDir || !pathToServicesDir.length || !(pathToServicesDir.length === 1)) {
         logger.warn(
-          'services directory should appear exactly once in the project- please make sure you are at the project root director'
+          'services directory should appear exactly once in the project- please make sure you are at the project root directory'
         )
       } else {
         const joinedPathToService = path.join(pathToServicesDir[0], servicePath)
@@ -140,7 +140,7 @@ export class Service extends AbstractCommand {
   }
 
   private getServiceClassName(servicePath: string) {
-    return startCase(path.parse(servicePath).base.split('.')[0]) + serviceFileNameSuffix
+    return _.startCase(path.parse(servicePath).base.split('.')[0]) + serviceFileNameSuffix
   }
 
   private async modifyServiceDefinitionFile(
@@ -172,7 +172,7 @@ export class Service extends AbstractCommand {
     definitionFileType: DefinitionFileType
   ): Promise<string> {
     const defFileContent = await readFileContent(defFilePath)
-    const parsedFile: File = await this.parser.parseFile(defFilePath, './')
+    const parsedFile: parser.File = await this.parser.parseFile(defFilePath, './')
     const { content: importsContent, end: importEnd } = this.getImportDefinitions(
       pathToService,
       serviceClassName,
@@ -200,7 +200,7 @@ export class Service extends AbstractCommand {
   private getImportDefinitions(
     pathToService: string,
     serviceClassName: string,
-    parsedFile: File,
+    parsedFile: parser.File,
     defFileContent: string
   ): DeclarationInfo {
     const importsEndChar = Array.isArray(parsedFile.imports)
@@ -236,7 +236,7 @@ export class Service extends AbstractCommand {
 
   private getModifiedServiceDefinitions(
     serviceClassName: string,
-    parsedFile: File,
+    parsedFile: parser.File,
     defFileContent: string,
     definitionFileType: DefinitionFileType
   ): DeclarationInfo {
@@ -258,7 +258,7 @@ export class Service extends AbstractCommand {
   }
 
   private getDeclarationContentByDefType(
-    declarationsArray: Declaration[],
+    declarationsArray: parser.Declaration[],
     defFileContent: string,
     definitionFileType: DefinitionFileType
   ): DeclarationInfo {
@@ -267,8 +267,9 @@ export class Service extends AbstractCommand {
       start: 0,
       end: 0
     }
-    const nameToFilterBy = get(fileDefinitionMap.get(definitionFileType), 'declarationName')
-    const filteredDeclaration: Declaration[] = declarationsArray.filter(
+    const nameToFilterBy = (fileDefinitionMap.get(definitionFileType) as DefinitionFileProps)
+      .declarationName
+    const filteredDeclaration: parser.Declaration[] = declarationsArray.filter(
       declaration => declaration.name === nameToFilterBy && declaration.start
     )
     if (filteredDeclaration.length !== 1) {
@@ -281,7 +282,7 @@ export class Service extends AbstractCommand {
       )
       return emptyDeclarationInfo
     } else {
-      const declarationToFind: Declaration = filteredDeclaration[0]
+      const declarationToFind: parser.Declaration = filteredDeclaration[0]
       if (!declarationToFind.start || !declarationToFind.end) {
         logger.warn('Could not find start and end for declaration ' + declarationToFind.name)
         return emptyDeclarationInfo
