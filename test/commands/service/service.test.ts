@@ -88,7 +88,7 @@ describe('test for service command', () => {
   })
 
   it('Should update files after service command action inner dir', async () => {
-    const actualDirToCreate = path.join(pathToActualDirectory, projectLegalFilesName)
+    const actualDirToCreate = path.join(pathToActualDirectory, projectLegalFilesNameInner)
     fse.mkdirsSync(actualDirToCreate)
     fse.copySync(absPathToProjectWithLegalFile, actualDirToCreate)
     process.chdir(actualDirToCreate)
