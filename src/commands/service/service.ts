@@ -110,7 +110,7 @@ export class Service extends AbstractCommand {
       const pathToServicesDir = await locateFile(servicePattern, './', 'dir')
       if (!pathToServicesDir || !pathToServicesDir.length || !(pathToServicesDir.length === 1)) {
         logger.warn(
-          'services directory should appear exactly once in the project- exitting service generation...'
+          'services directory should appear exactly once in the project- please make sure you are at the project root director'
         )
       } else {
         const joinedPathToService = path.join(pathToServicesDir[0], servicePath)

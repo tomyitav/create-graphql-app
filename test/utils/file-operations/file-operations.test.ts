@@ -38,6 +38,10 @@ describe('test file-operation module functions', () => {
     expect(typeof fileContent).toBe('string')
   })
 
+  it('works if reading file rejects on non existing', () => {
+    return expect(readFileContent(pathToNonExistingFile)).rejects.toBeDefined()
+  })
+
   it('works if managed to write file content', async () => {
     await writeToFile(pathToFileToWrite, 'Test writing content')
     expect(fs.existsSync(pathToFileToWrite)).toBeTruthy()
