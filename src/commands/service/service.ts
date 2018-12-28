@@ -101,25 +101,16 @@ export class Service extends AbstractCommand {
   }
 
   private async createServiceFile(servicePath: string) {
-    try {
-      await this.writeServiceFile(servicePath)
-    } catch (err) {
-      logger.error(`Failed to generate service- ${err}`)
-    }
+    await this.writeServiceFile(servicePath)
+    logger.info('Service was successfully created!')
   }
 
   private async writeServiceFile(servicePath: string) {
     try {
       const pathToServicesDir = await locateFile(servicePattern, './', 'dir')
-      if (pathToServicesDir.length === 0) {
+      if (!pathToServicesDir || !pathToServicesDir.length || !(pathToServicesDir.length === 1)) {
         logger.warn(
-          'services directory was not found. please make sure you are in project root directory, and that services directory exists'
-        )
-      } else if (pathToServicesDir.length > 1) {
-        logger.warn(
-          'Found two services directories: ' +
-            pathToServicesDir.toString() +
-            '. Please make sure only one services directory exists.'
+          'services directory should appear only once in the project- exitting service generation...'
         )
       } else {
         const joinedPathToService = path.join(pathToServicesDir[0], servicePath)

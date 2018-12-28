@@ -43,6 +43,12 @@ describe('test file-operation module functions', () => {
     expect(fs.existsSync(pathToFileToWrite)).toBeTruthy()
   })
 
+  it('works if writing to file with wrong extension fails', () => {
+    return expect(writeToFile(pathToIllegalExtension, 'Test writing content')).rejects.toEqual(
+      'Illegal file extension.. only .ts extensions are allowed'
+    )
+  })
+
   it('works if managed to locate directory content', async () => {
     const dirsFound = await locateFile(/locate/, pathToLocate, 'dir')
     expect(dirsFound.length).toBe(1)
@@ -54,9 +60,9 @@ describe('test file-operation module functions', () => {
     expect(filesFoundNonExisting.length).toBe(0)
   })
 
-  it('works if writing to file with wrong extension fails', () => {
-    return expect(writeToFile(pathToIllegalExtension, 'Test writing content')).rejects.toEqual(
-      'Illegal file extension.. only .ts extensions are allowed'
+  it('works if locating undefined pattern fails on dir', () => {
+    return expect(locateFile(undefined, pathToLocate, 'dir')).rejects.toEqual(
+      'Illegal pattern received in locate function'
     )
   })
 })

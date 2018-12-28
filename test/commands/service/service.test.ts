@@ -8,11 +8,17 @@ import { compareTestFilesByPaths } from '../../test-helpers'
 describe('test for service command', () => {
   let service: AbstractCommand
   const projectLegalFilesName = 'project-with-legal-files'
+  const projectOneMissingFile = 'project-with-one-missing-file'
   const projectLegalFilesNameInner = 'project-with-legal-files-inner-dir'
   const absPathToProjectWithLegalFile = path.join(
     __dirname,
     'projects-for-test',
     projectLegalFilesName
+  )
+  const absPathToProjectWithOneMissing = path.join(
+    __dirname,
+    'projects-for-test',
+    projectOneMissingFile
   )
   const pathToActualDirectory = path.join(__dirname, '../../output/actual')
   const pathToExpectedDirectory = path.join(__dirname, '../../output/expected/commands/service')
@@ -85,6 +91,38 @@ describe('test for service command', () => {
       'src/interfaces/IAppContext.ts'
     )
     compareTestFilesByPaths(pathToActualContextInterface, pathToExpectedContextInterface)
+  })
+
+  it('Should update files after service command action when one def file missing', async () => {
+    const actualDirToCreate = path.join(pathToActualDirectory, projectOneMissingFile)
+    fse.mkdirsSync(actualDirToCreate)
+    fse.copySync(absPathToProjectWithOneMissing, actualDirToCreate)
+    process.chdir(actualDirToCreate)
+    const act = service.getAction()
+    await act('car.ts')
+    const pathToExpectedService = path.join(
+      pathToExpectedDirectory,
+      projectOneMissingFile,
+      'src/services/car.ts'
+    )
+    const pathToActualService = path.join(actualDirToCreate, 'src/services/car.ts')
+    compareTestFilesByPaths(pathToActualService, pathToExpectedService)
+
+    const pathToExpectedInjector = path.join(
+      pathToExpectedDirectory,
+      projectOneMissingFile,
+      'src/core/injector.ts'
+    )
+    const pathToActualInjector = path.join(actualDirToCreate, 'src/core/injector.ts')
+    compareTestFilesByPaths(pathToActualInjector, pathToExpectedInjector)
+
+    const pathToExpectedContext = path.join(
+      pathToExpectedDirectory,
+      projectOneMissingFile,
+      'src/context.ts'
+    )
+    const pathToActualContext = path.join(actualDirToCreate, 'src/context.ts')
+    compareTestFilesByPaths(pathToActualContext, pathToExpectedContext)
   })
 
   it('Should update files after service command action inner dir', async () => {
