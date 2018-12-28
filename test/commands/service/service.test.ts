@@ -9,6 +9,7 @@ describe('test for service command', () => {
   let service: AbstractCommand
   const projectLegalFilesName = 'project-with-legal-files'
   const projectOneMissingFile = 'project-with-one-missing-file'
+  const projectMissingServicesDir = 'project-with-no-services-dir'
   const projectLegalFilesNameInner = 'project-with-legal-files-inner-dir'
   const absPathToProjectWithLegalFile = path.join(
     __dirname,
@@ -19,6 +20,11 @@ describe('test for service command', () => {
     __dirname,
     'projects-for-test',
     projectOneMissingFile
+  )
+  const absPathToProjectWithNoServices = path.join(
+    __dirname,
+    'projects-for-test',
+    projectMissingServicesDir
   )
   const pathToActualDirectory = path.join(__dirname, '../../output/actual')
   const pathToExpectedDirectory = path.join(__dirname, '../../output/expected/commands/service')
@@ -91,6 +97,45 @@ describe('test for service command', () => {
       'src/interfaces/IAppContext.ts'
     )
     compareTestFilesByPaths(pathToActualContextInterface, pathToExpectedContextInterface)
+  })
+
+  it('Should not update def files after service command when no services dir', async () => {
+    const actualDirToCreate = path.join(pathToActualDirectory, projectMissingServicesDir)
+    fse.mkdirsSync(actualDirToCreate)
+    fse.copySync(absPathToProjectWithNoServices, actualDirToCreate)
+    process.chdir(actualDirToCreate)
+    const act = service.getAction()
+    await act('car.ts')
+    const pathToServiceFileIfHadBeenCreated = path.join(actualDirToCreate, 'car.ts')
+    const serviceFileExists: boolean = fs.existsSync(pathToServiceFileIfHadBeenCreated)
+    expect(serviceFileExists).not.toBeTruthy()
+
+    const pathToExpectedInjector = path.join(
+      pathToExpectedDirectory,
+      projectMissingServicesDir,
+      'src/core/injector.ts'
+    )
+    const pathToActualInjector = path.join(actualDirToCreate, 'src/core/injector.ts')
+    compareTestFilesByPaths(pathToActualInjector, pathToExpectedInjector, false)
+
+    const pathToExpectedContext = path.join(
+      pathToExpectedDirectory,
+      projectMissingServicesDir,
+      'src/context.ts'
+    )
+    const pathToActualContext = path.join(actualDirToCreate, 'src/context.ts')
+    compareTestFilesByPaths(pathToActualContext, pathToExpectedContext, false)
+
+    const pathToExpectedContextInterface = path.join(
+      pathToExpectedDirectory,
+      projectMissingServicesDir,
+      'src/interfaces/IAppContext.ts'
+    )
+    const pathToActualContextInterface = path.join(
+      actualDirToCreate,
+      'src/interfaces/IAppContext.ts'
+    )
+    compareTestFilesByPaths(pathToActualContextInterface, pathToExpectedContextInterface, false)
   })
 
   it('Should update files after service command action when one def file missing', async () => {

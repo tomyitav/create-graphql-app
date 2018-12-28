@@ -102,7 +102,7 @@ export class Service extends AbstractCommand {
 
   private async createServiceFile(servicePath: string) {
     await this.writeServiceFile(servicePath)
-    logger.info('Service was successfully created!')
+    logger.info('Service generation command was completed')
   }
 
   private async writeServiceFile(servicePath: string) {
@@ -110,7 +110,7 @@ export class Service extends AbstractCommand {
       const pathToServicesDir = await locateFile(servicePattern, './', 'dir')
       if (!pathToServicesDir || !pathToServicesDir.length || !(pathToServicesDir.length === 1)) {
         logger.warn(
-          'services directory should appear only once in the project- exitting service generation...'
+          'services directory should appear exactly once in the project- exitting service generation...'
         )
       } else {
         const joinedPathToService = path.join(pathToServicesDir[0], servicePath)
