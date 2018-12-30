@@ -7,6 +7,7 @@ const find = find_
 const allowedFileExtensions = ['.ts']
 
 export type FileType = 'file' | 'dir'
+export type LetterModifyType = 'lower' | 'upper'
 
 export function writeToFile(pathToFile: string, content: string): Promise<void> {
   return new Promise((resolve, reject) => {
@@ -73,4 +74,10 @@ export function readFileContent(pathToFile: string): Promise<string> {
       }
     })
   })
+}
+
+export function switchFirstLetter(name: string, operation: LetterModifyType): string {
+  return operation === 'upper'
+    ? name[0].toUpperCase() + name.substring(1)
+    : name[0].toLowerCase() + name.substring(1)
 }
