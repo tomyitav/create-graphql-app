@@ -1,11 +1,5 @@
 import { AbstractCommand, CommandOptions } from '../abstract-command'
-import {
-  fileExists,
-  locateFile,
-  readFileContent,
-  switchFirstLetter,
-  writeToFile
-} from '../../utils/file-operations'
+import { fileExists, locateFile, readFileContent, writeToFile } from '../../utils/file-operations'
 import {
   contextInterfacePattern,
   contextInterfaceSignatureFn,
@@ -25,6 +19,7 @@ import {
 import * as path from 'path'
 import logger from '../../utils/logger'
 import * as parser from 'typescript-parser'
+import * as _ from 'lodash'
 
 type DefinitionFileType = 'injector' | 'context' | 'context-interface'
 interface DefinitionFileProps {
@@ -145,9 +140,7 @@ export class Service extends AbstractCommand {
   }
 
   private getServiceClassName(servicePath: string) {
-    return (
-      switchFirstLetter(path.parse(servicePath).base.split('.')[0], 'upper') + serviceFileNameSuffix
-    )
+    return _.startCase(path.parse(servicePath).base.split('.')[0]) + serviceFileNameSuffix
   }
 
   private async modifyServiceDefinitionFile(
@@ -155,7 +148,7 @@ export class Service extends AbstractCommand {
     serviceClassName: string,
     definitionFileType: DefinitionFileType
   ): Promise<void> {
-    logger.info('Modifying definitions in ' + +definitionFileType + ' file...')
+    logger.info('Modifying definitions in ' + definitionFileType + ' file...')
     const filePatternToLocate = (fileDefinitionMap.get(definitionFileType) as DefinitionFileProps)
       .filePattern
     const pathToDefFile = await locateFile(filePatternToLocate, './', 'file')
@@ -238,7 +231,7 @@ export class Service extends AbstractCommand {
     return pathToService
       .split('.')[0]
       .split('services')[1]
-      .replace('\\', '/')
+      .replace(/\\/g, '/')
   }
 
   private getModifiedServiceDefinitions(

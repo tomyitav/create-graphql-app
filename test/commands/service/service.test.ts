@@ -184,6 +184,33 @@ describe('test for service command', () => {
     )
     const pathToActualService = path.join(actualDirToCreate, 'src/services/inner/dir/car.ts')
     compareTestFilesByPaths(pathToActualService, pathToExpectedService)
+
+    const pathToExpectedInjector = path.join(
+      pathToExpectedDirectory,
+      projectLegalFilesNameInner,
+      'src/core/injector.ts'
+    )
+    const pathToActualInjector = path.join(actualDirToCreate, 'src/core/injector.ts')
+    compareTestFilesByPaths(pathToActualInjector, pathToExpectedInjector)
+
+    const pathToExpectedContext = path.join(
+      pathToExpectedDirectory,
+      projectLegalFilesNameInner,
+      'src/context.ts'
+    )
+    const pathToActualContext = path.join(actualDirToCreate, 'src/context.ts')
+    compareTestFilesByPaths(pathToActualContext, pathToExpectedContext)
+
+    const pathToExpectedContextInterface = path.join(
+      pathToExpectedDirectory,
+      projectLegalFilesNameInner,
+      'src/interfaces/IAppContext.ts'
+    )
+    const pathToActualContextInterface = path.join(
+      actualDirToCreate,
+      'src/interfaces/IAppContext.ts'
+    )
+    compareTestFilesByPaths(pathToActualContextInterface, pathToExpectedContextInterface)
   })
 
   it('Should not override existing service file', async () => {

@@ -75,9 +75,3 @@ export function readFileContent(pathToFile: string): Promise<string> {
     })
   })
 }
-
-export function switchFirstLetter(name: string, operation: LetterModifyType): string {
-  return operation === 'upper'
-    ? name[0].toUpperCase() + name.substring(1)
-    : name[0].toLowerCase() + name.substring(1)
-}

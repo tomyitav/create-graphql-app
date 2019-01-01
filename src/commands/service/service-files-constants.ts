@@ -1,4 +1,4 @@
-import { switchFirstLetter } from '../../utils/file-operations'
+import * as _ from 'lodash'
 
 export const servicePattern = /service/
 export const contextPattern = /context/
@@ -14,6 +14,6 @@ export const contextStartSeparators = ['return {']
 export const contextInterfaceStartSeparators = ['{']
 export const injectorSignatureFn = (serviceName: string) => '  ' + serviceName + ','
 export const contextSignatureFn = (serviceName: string) =>
-  '    ' + switchFirstLetter(serviceName, 'lower') + ': ' + 'injector.get(' + serviceName + '),'
+  '    ' + _.lowerFirst(serviceName) + ': ' + 'injector.get(' + serviceName + '),'
 export const contextInterfaceSignatureFn = (serviceName: string) =>
-  '  ' + switchFirstLetter(serviceName, 'lower') + ': ' + serviceName
+  '  ' + _.lowerFirst(serviceName) + ': ' + serviceName
