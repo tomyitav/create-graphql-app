@@ -75,3 +75,20 @@ export function readFileContent(pathToFile: string): Promise<string> {
     })
   })
 }
+
+export function findCommonPath(stringsToCheck: string[]): string {
+  if (Array.isArray(stringsToCheck) && stringsToCheck.length > 0) {
+    if (stringsToCheck.length === 1) {
+      return stringsToCheck[0]
+    }
+    const sortedArray = stringsToCheck.concat().sort()
+    const first = sortedArray[0]
+    const last = sortedArray[sortedArray.length - 1]
+    const L = first.length
+    let i = 0
+    while (i < L && first.charAt(i) === last.charAt(i)) i++
+    return first.substring(0, i)
+  } else {
+    return ''
+  }
+}

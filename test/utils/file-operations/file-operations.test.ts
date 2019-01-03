@@ -1,5 +1,6 @@
 import {
   fileExists,
+  findCommonPath,
   locateFile,
   readFileContent,
   writeToFile
@@ -68,5 +69,20 @@ describe('test file-operation module functions', () => {
     return expect(locateFile(undefined, pathToLocate, 'dir')).rejects.toEqual(
       'Illegal pattern received in locate function'
     )
+  })
+
+  it('should find correct common path', () => {
+    const paths1 = ['try/some/path', 'try/some']
+    const common1 = findCommonPath(paths1)
+    expect(common1).toBe('try/some')
+    const paths2 = ['try/some/path', 'rry/some']
+    const common2 = findCommonPath(paths2)
+    expect(common2).toBe('')
+    const paths3: any = []
+    const common3 = findCommonPath(paths3)
+    expect(common3).toBe('')
+    const paths4: any = ['somepath']
+    const common4 = findCommonPath(paths4)
+    expect(common4).toBe('somepath')
   })
 })

@@ -11,6 +11,7 @@ describe('test for service command', () => {
   const projectOneMissingFile = 'project-with-one-missing-file'
   const projectMissingServicesDir = 'project-with-no-services-dir'
   const projectLegalFilesNameInner = 'project-with-legal-files-inner-dir'
+  const project2InnerDirs = 'project-with-2-inner-dirs'
   const absPathToProjectWithLegalFile = path.join(
     __dirname,
     'projects-for-test',
@@ -26,6 +27,7 @@ describe('test for service command', () => {
     'projects-for-test',
     projectMissingServicesDir
   )
+  const absPathToProject2InnerDirs = path.join(__dirname, 'projects-for-test', project2InnerDirs)
   const pathToActualDirectory = path.join(__dirname, '../../output/actual')
   const pathToExpectedDirectory = path.join(__dirname, '../../output/expected/commands/service')
   const listAllDirectories = (rootDir: string) =>
@@ -90,6 +92,49 @@ describe('test for service command', () => {
     const pathToExpectedContextInterface = path.join(
       pathToExpectedDirectory,
       projectLegalFilesName,
+      'src/interfaces/IAppContext.ts'
+    )
+    const pathToActualContextInterface = path.join(
+      actualDirToCreate,
+      'src/interfaces/IAppContext.ts'
+    )
+    compareTestFilesByPaths(pathToActualContextInterface, pathToExpectedContextInterface)
+  })
+
+  it('Should update files after service command action with inner dir', async () => {
+    const actualDirToCreate = path.join(pathToActualDirectory, project2InnerDirs)
+    fse.mkdirsSync(actualDirToCreate)
+    fse.copySync(absPathToProject2InnerDirs, actualDirToCreate)
+    process.chdir(actualDirToCreate)
+    const act = service.getAction()
+    await act('car.ts')
+    const pathToExpectedService = path.join(
+      pathToExpectedDirectory,
+      project2InnerDirs,
+      'src/services/car.ts'
+    )
+    const pathToActualService = path.join(actualDirToCreate, 'src/services/car.ts')
+    compareTestFilesByPaths(pathToActualService, pathToExpectedService)
+
+    const pathToExpectedInjector = path.join(
+      pathToExpectedDirectory,
+      project2InnerDirs,
+      'src/core/injector.ts'
+    )
+    const pathToActualInjector = path.join(actualDirToCreate, 'src/core/injector.ts')
+    compareTestFilesByPaths(pathToActualInjector, pathToExpectedInjector)
+
+    const pathToExpectedContext = path.join(
+      pathToExpectedDirectory,
+      project2InnerDirs,
+      'src/context.ts'
+    )
+    const pathToActualContext = path.join(actualDirToCreate, 'src/context.ts')
+    compareTestFilesByPaths(pathToActualContext, pathToExpectedContext)
+
+    const pathToExpectedContextInterface = path.join(
+      pathToExpectedDirectory,
+      project2InnerDirs,
       'src/interfaces/IAppContext.ts'
     )
     const pathToActualContextInterface = path.join(

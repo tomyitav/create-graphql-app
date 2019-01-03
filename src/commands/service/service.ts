@@ -1,5 +1,11 @@
 import { AbstractCommand, CommandOptions } from '../abstract-command'
-import { fileExists, locateFile, readFileContent, writeToFile } from '../../utils/file-operations'
+import {
+  fileExists,
+  findCommonPath,
+  locateFile,
+  readFileContent,
+  writeToFile
+} from '../../utils/file-operations'
 import {
   contextInterfacePattern,
   contextInterfaceSignatureFn,
@@ -107,10 +113,15 @@ export class Service extends AbstractCommand {
 
   private async writeServiceFile(servicePath: string) {
     try {
-      const pathToServicesDir = await locateFile(servicePattern, './', 'dir')
-      if (!pathToServicesDir || !pathToServicesDir.length || !(pathToServicesDir.length === 1)) {
+      const pathToServicesDir = await locateFile(servicePattern, './src', 'dir')
+      const commonRootPath = findCommonPath(pathToServicesDir)
+      if (!servicePattern.test(commonRootPath)) {
         logger.warn(
-          'services directory should appear exactly once in the project- please make sure you are at the project root directory'
+          'services directory should appear exactly once in the project, found paths- ' +
+            pathToServicesDir.toString()
+        )
+        logger.warn(
+          'please make sure you are at the project root directory and that src dir contains single services dir'
         )
       } else {
         const joinedPathToService = path.join(pathToServicesDir[0], servicePath)
@@ -151,7 +162,7 @@ export class Service extends AbstractCommand {
     logger.info('Modifying definitions in ' + definitionFileType + ' file...')
     const filePatternToLocate = (fileDefinitionMap.get(definitionFileType) as DefinitionFileProps)
       .filePattern
-    const pathToDefFile = await locateFile(filePatternToLocate, './', 'file')
+    const pathToDefFile = await locateFile(filePatternToLocate, './src', 'file')
     if (!pathToDefFile || pathToDefFile.length !== 1) {
       logger.warn('Definition file for ' + definitionFileType + ' not found')
     } else {
