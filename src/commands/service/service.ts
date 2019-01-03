@@ -232,8 +232,6 @@ export class Service extends AbstractCommand {
       " } from '" +
       importServicePrefix +
       this.locationInsideServicesDir(pathToService) +
-      '/' +
-      serviceClassName +
       "'"
     )
   }

@@ -9,7 +9,7 @@ import { AbstractSetting } from './config/AbstractSetting'
 import { Setting } from './config/Setting'
 import { AbstractLogger } from './logger/AbstractLogger'
 import { Logger } from './logger/Logger'
-import { CarService } from '@src/services/inner/dir/car/CarService'
+import { CarService } from '@src/services/inner/dir/car'
 
 const injector: Injector = ReflectiveInjector.resolveAndCreate([
   CarService,
