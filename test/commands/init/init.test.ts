@@ -20,7 +20,12 @@ describe('Init command test', () => {
   afterEach(() => {
     if (fs.existsSync(absoluteProcessDir)) {
       fse.remove(absoluteProcessDir, err => {
-        console.log('Could not remove cloned dir. On windows desktops, remove it manually...', err)
+        if (err) {
+          console.log(
+            'Could not remove cloned dir. On windows desktops, remove it manually...',
+            err
+          )
+        }
       })
     }
   })

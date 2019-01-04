@@ -2,23 +2,38 @@ import { AbstractCommand } from '../../../src/commands/abstract-command'
 import { Resolver } from '../../../src/commands/resolver/resolver'
 import * as fs from 'fs'
 import * as fse from 'fs-extra'
+import * as path from 'path'
 
 describe('Resolver command test', () => {
   let res: AbstractCommand
-  const pathToType1 = './test/commands/resolver/legal-schemas/test-schema1.ts'
-  const pathToTypeTweets = './test/commands/resolver/legal-schemas/tweet-test-schema.ts'
-  const pathToIllegalSchema1 = './test/commands/resolver/illegal-schemas/illegal-schema1.ts'
-  const pathToActualResolver1 = './test/output/actual/test-resolver.ts'
-  const pathToActualResolverTweets = './test/output/actual/tweets-test-resolver.ts'
-  const pathToDirectoryActualResolver = './test/output/actual/non/existing/dir/test-resolver.ts'
-  const resolverDirLocation = './test/output/actual/non'
-  const pathToExpectedResolver1 = './test/output/expected/commands/resolver/test-resolver.ts'
-  const pathToExpectedResolverTweets =
-    './test/output/expected/commands/resolver/tweets-test-resolver.ts'
-  const pathToNonOverridenFile =
-    './test/output/expected/commands/resolver/test-not-overriden-by-resolver.ts'
+  const pathToType1 = path.join(__dirname, 'legal-schemas/test-schema1.ts')
+  const pathToTypeTweets = path.join(__dirname, 'legal-schemas/tweet-test-schema.ts')
+  const pathToIllegalSchema1 = path.join(__dirname, 'illegal-schemas/illegal-schema1.ts')
+  const pathToActualResolver1 = path.join(__dirname, '../../output/actual/test-resolver.ts')
+  const pathToActualResolverTweets = path.join(
+    __dirname,
+    '../..output/actual/tweets-test-resolver.ts'
+  )
+  const pathToDirectoryActualResolver = path.join(
+    __dirname,
+    '../..output/actual/non/existing/dir/test-resolver.ts'
+  )
+  const resolverDirLocation = path.join(__dirname, '../../output/actual/non')
+  const pathToExpectedResolver1 = path.join(
+    __dirname,
+    '../../output/expected/commands/resolver/test-resolver.ts'
+  )
+  const pathToExpectedResolverTweets = path.join(
+    __dirname,
+    '../../output/expected/commands/resolver/tweets-test-resolver.ts'
+  )
+  const pathToNonOverridenFile = path.join(
+    __dirname,
+    '../../output/expected/commands/resolver/test-not-overriden-by-resolver.ts'
+  )
 
   beforeAll(() => {
+    process.chdir(__dirname)
     res = new Resolver()
   })
 

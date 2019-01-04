@@ -14,6 +14,11 @@ for (let command of allCommands) {
     .description(command.getDescription())
     .alias(command.getAlias())
     .action(command.getAction())
+  const optionsPattern = command.getOptions().optionsPattern
+  const optionsDescription = command.getOptions().optionsDescription
+  for (let i = 0; i < optionsPattern.length; i++) {
+    program.option(optionsPattern[i], optionsDescription[i])
+  }
 }
 
 program.parse(process.argv)
