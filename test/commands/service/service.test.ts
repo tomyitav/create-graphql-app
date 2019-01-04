@@ -114,7 +114,7 @@ describe('test for service command', () => {
   })
 
   it('Should update files after service command action but not context when ignored', async () => {
-    const actualDirToCreate = path.join(pathToActualDirectory, projectLegalFilesName)
+    const actualDirToCreate = path.join(pathToActualDirectory, projectLegalFilesNameIgnoreContext)
     fse.mkdirsSync(actualDirToCreate)
     fse.copySync(absPathToProjectWithLegalFile, actualDirToCreate)
     process.chdir(actualDirToCreate)
