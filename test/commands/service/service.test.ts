@@ -4,14 +4,26 @@ import * as path from 'path'
 import * as fs from 'fs'
 import * as fse from 'fs-extra'
 import { compareTestFilesByPaths } from '../../test-helpers'
+import { ActionCmd } from '../../../src/commands/ActionCmd'
 
 describe('test for service command', () => {
   let service: AbstractCommand
   const projectLegalFilesName = 'project-with-legal-files'
+  const projectLegalFilesNameIgnoreContext = 'project-with-legal-files-ignore-context'
   const projectOneMissingFile = 'project-with-one-missing-file'
   const projectMissingServicesDir = 'project-with-no-services-dir'
   const projectLegalFilesNameInner = 'project-with-legal-files-inner-dir'
   const project2InnerDirs = 'project-with-2-inner-dirs'
+  const cmdForCommandUndefined: ActionCmd = {
+    parent: {
+      ignoreContext: undefined
+    }
+  }
+  const cmdForCommandTrue: ActionCmd = {
+    parent: {
+      ignoreContext: true
+    }
+  }
   const absPathToProjectWithLegalFile = path.join(
     __dirname,
     'projects-for-test',
@@ -64,7 +76,7 @@ describe('test for service command', () => {
     fse.copySync(absPathToProjectWithLegalFile, actualDirToCreate)
     process.chdir(actualDirToCreate)
     const act = service.getAction()
-    await act('car.ts')
+    await act('car.ts', cmdForCommandUndefined)
     const pathToExpectedService = path.join(
       pathToExpectedDirectory,
       projectLegalFilesName,
@@ -101,13 +113,56 @@ describe('test for service command', () => {
     compareTestFilesByPaths(pathToActualContextInterface, pathToExpectedContextInterface)
   })
 
+  it('Should update files after service command action but not context when ignored', async () => {
+    const actualDirToCreate = path.join(pathToActualDirectory, projectLegalFilesName)
+    fse.mkdirsSync(actualDirToCreate)
+    fse.copySync(absPathToProjectWithLegalFile, actualDirToCreate)
+    process.chdir(actualDirToCreate)
+    const act = service.getAction()
+    await act('car.ts', cmdForCommandTrue)
+    const pathToExpectedService = path.join(
+      pathToExpectedDirectory,
+      projectLegalFilesNameIgnoreContext,
+      'src/services/car.ts'
+    )
+    const pathToActualService = path.join(actualDirToCreate, 'src/services/car.ts')
+    compareTestFilesByPaths(pathToActualService, pathToExpectedService)
+
+    const pathToExpectedInjector = path.join(
+      pathToExpectedDirectory,
+      projectLegalFilesNameIgnoreContext,
+      'src/core/injector.ts'
+    )
+    const pathToActualInjector = path.join(actualDirToCreate, 'src/core/injector.ts')
+    compareTestFilesByPaths(pathToActualInjector, pathToExpectedInjector)
+
+    const pathToExpectedContext = path.join(
+      pathToExpectedDirectory,
+      projectLegalFilesNameIgnoreContext,
+      'src/context.ts'
+    )
+    const pathToActualContext = path.join(actualDirToCreate, 'src/context.ts')
+    compareTestFilesByPaths(pathToActualContext, pathToExpectedContext)
+
+    const pathToExpectedContextInterface = path.join(
+      pathToExpectedDirectory,
+      projectLegalFilesNameIgnoreContext,
+      'src/interfaces/IAppContext.ts'
+    )
+    const pathToActualContextInterface = path.join(
+      actualDirToCreate,
+      'src/interfaces/IAppContext.ts'
+    )
+    compareTestFilesByPaths(pathToActualContextInterface, pathToExpectedContextInterface)
+  })
+
   it('Should update files after service command action with inner dir', async () => {
     const actualDirToCreate = path.join(pathToActualDirectory, project2InnerDirs)
     fse.mkdirsSync(actualDirToCreate)
     fse.copySync(absPathToProject2InnerDirs, actualDirToCreate)
     process.chdir(actualDirToCreate)
     const act = service.getAction()
-    await act('car.ts')
+    await act('car.ts', cmdForCommandUndefined)
     const pathToExpectedService = path.join(
       pathToExpectedDirectory,
       project2InnerDirs,
@@ -150,7 +205,7 @@ describe('test for service command', () => {
     fse.copySync(absPathToProjectWithNoServices, actualDirToCreate)
     process.chdir(actualDirToCreate)
     const act = service.getAction()
-    await act('car.ts')
+    await act('car.ts', cmdForCommandUndefined)
     const pathToServiceFileIfHadBeenCreated = path.join(actualDirToCreate, 'car.ts')
     const serviceFileExists: boolean = fs.existsSync(pathToServiceFileIfHadBeenCreated)
     expect(serviceFileExists).not.toBeTruthy()
@@ -189,7 +244,7 @@ describe('test for service command', () => {
     fse.copySync(absPathToProjectWithOneMissing, actualDirToCreate)
     process.chdir(actualDirToCreate)
     const act = service.getAction()
-    await act('car.ts')
+    await act('car.ts', cmdForCommandUndefined)
     const pathToExpectedService = path.join(
       pathToExpectedDirectory,
       projectOneMissingFile,
@@ -221,7 +276,7 @@ describe('test for service command', () => {
     fse.copySync(absPathToProjectWithLegalFile, actualDirToCreate)
     process.chdir(actualDirToCreate)
     const act = service.getAction()
-    await act('/inner/dir/car.ts')
+    await act('/inner/dir/car.ts', cmdForCommandUndefined)
     const pathToExpectedService = path.join(
       pathToExpectedDirectory,
       projectLegalFilesNameInner,
@@ -265,7 +320,7 @@ describe('test for service command', () => {
     )
     process.chdir(pathToExistingServiceDir)
     const act = service.getAction()
-    await act('car.ts')
+    await act('car.ts', cmdForCommandUndefined)
     const pathToExistedService = path.join(pathToExistingServiceDir, 'src/services/car.ts')
     const pathToExpectedServiceIfOverride = path.join(
       pathToExpectedDirectory,

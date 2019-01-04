@@ -26,6 +26,7 @@ import * as path from 'path'
 import logger from '../../utils/logger'
 import * as parser from 'typescript-parser'
 import * as _ from 'lodash'
+import { ActionCmd } from '../ActionCmd'
 
 type DefinitionFileType = 'injector' | 'context' | 'context-interface'
 interface DefinitionFileProps {
@@ -33,6 +34,7 @@ interface DefinitionFileProps {
   declarationName: string
   possibleStartSeparators: string[]
   definitionSignatureFn: (serviceName: string) => string
+  ignoreContext: boolean
 }
 
 interface DeclarationInfo {
@@ -51,7 +53,8 @@ const fileDefinitionMap: Map<DefinitionFileType, DefinitionFileProps> = new Map<
       filePattern: injectorPattern,
       declarationName: 'injector',
       possibleStartSeparators: injectorStartSeparators,
-      definitionSignatureFn: injectorSignatureFn
+      definitionSignatureFn: injectorSignatureFn,
+      ignoreContext: false
     }
   ],
   [
@@ -60,7 +63,8 @@ const fileDefinitionMap: Map<DefinitionFileType, DefinitionFileProps> = new Map<
       filePattern: contextPattern,
       declarationName: 'getContext',
       possibleStartSeparators: contextStartSeparators,
-      definitionSignatureFn: contextSignatureFn
+      definitionSignatureFn: contextSignatureFn,
+      ignoreContext: true
     }
   ],
   [
@@ -69,7 +73,8 @@ const fileDefinitionMap: Map<DefinitionFileType, DefinitionFileProps> = new Map<
       filePattern: contextInterfacePattern,
       declarationName: 'IAppContext',
       possibleStartSeparators: contextInterfaceStartSeparators,
-      definitionSignatureFn: contextInterfaceSignatureFn
+      definitionSignatureFn: contextInterfaceSignatureFn,
+      ignoreContext: true
     }
   ]
 ])
@@ -95,23 +100,23 @@ export class Service extends AbstractCommand {
 
   public getOptions(): CommandOptions {
     return {
-      optionsPattern: ['--no-context'],
+      optionsPattern: ['--ignoreContext'],
       optionsDescription: ['Do not add service to server gql context']
     }
   }
 
   public getAction(): (...args: any[]) => void {
-    return async (servicePath: string) => {
-      return this.createServiceFile(servicePath)
+    return async (servicePath: string, cmd: ActionCmd) => {
+      return this.createServiceFile(servicePath, cmd.parent.ignoreContext)
     }
   }
 
-  private async createServiceFile(servicePath: string) {
-    await this.writeServiceFile(servicePath)
+  private async createServiceFile(servicePath: string, ignoreContext: boolean | undefined) {
+    await this.writeServiceFile(servicePath, ignoreContext)
     logger.info('Service generation command was completed')
   }
 
-  private async writeServiceFile(servicePath: string) {
+  private async writeServiceFile(servicePath: string, ignoreContext: boolean | undefined) {
     try {
       const pathToServicesDir = await locateFile(servicePattern, './src', 'dir')
       const commonRootPath = findCommonPath(pathToServicesDir)
@@ -134,9 +139,13 @@ export class Service extends AbstractCommand {
           await writeToFile(joinedPathToService, this.getServiceFileContent(serviceName))
           logger.info('Service file was added to- ' + joinedPathToService)
           logger.info('Editing service definition files...')
-          const serviceDefinitionPromises = Array.from(fileDefinitionMap.keys()).map(def =>
-            this.modifyServiceDefinitionFile(joinedPathToService, serviceName, def)
-          )
+          const definitionFileTypes = Array.from(fileDefinitionMap.keys())
+          const serviceDefinitionPromises = definitionFileTypes
+            .filter((def: DefinitionFileType) => {
+              const definitionProps = fileDefinitionMap.get(def) as DefinitionFileProps
+              return ignoreContext ? !definitionProps.ignoreContext : true
+            })
+            .map(def => this.modifyServiceDefinitionFile(joinedPathToService, serviceName, def))
           await Promise.all(serviceDefinitionPromises)
           logger.info('Definition files were successfully updated!')
         }
