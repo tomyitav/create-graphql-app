@@ -48,6 +48,19 @@ To generate a matching resolver file for type file, execute the command:
 This will create a matching file, with all Query, Mutation and Subscription
 definitions.
 
+### Generate services
+
+Our server resolvers should operate as a thin layer, or controller, that links between the schema, 
+and the server business logic. We use *services* for our model, to perform logic such as api fetching,
+db operations, etc. In order to create a new service, run the command:
+
+```gga s <service-path> [--ignoreContext]```
+
+This will create a new service file to services directory. Also, it will register the service on the
+server *injector* file, and will add its definition to the context object, thus allowing its usage
+by resolvers.
+You can exclude context file additions by passing the *ignoreContext* flag. 
+
 ### Deploy server to production
 
 Inside the project directory, type: 
