@@ -9,6 +9,7 @@ import { ActionCmd } from '../../../src/commands/ActionCmd'
 describe('test for service command', () => {
   let service: AbstractCommand
   const projectLegalFilesName = 'project-with-legal-files'
+  const projectLegalFilesAlternatePrefix = 'project-with-legal-files-alternative-prefix'
   const projectLegalFilesNameIgnoreContext = 'project-with-legal-files-ignore-context'
   const projectOneMissingFile = 'project-with-one-missing-file'
   const projectMissingServicesDir = 'project-with-no-services-dir'
@@ -28,6 +29,11 @@ describe('test for service command', () => {
     __dirname,
     'projects-for-test',
     projectLegalFilesName
+  )
+  const absPathToProjectWithAlternatePrfix = path.join(
+    __dirname,
+    'projects-for-test',
+    projectLegalFilesAlternatePrefix
   )
   const absPathToProjectWithOneMissing = path.join(
     __dirname,
@@ -74,6 +80,49 @@ describe('test for service command', () => {
     const actualDirToCreate = path.join(pathToActualDirectory, projectLegalFilesName)
     fse.mkdirsSync(actualDirToCreate)
     fse.copySync(absPathToProjectWithLegalFile, actualDirToCreate)
+    process.chdir(actualDirToCreate)
+    const act = service.getAction()
+    await act('car.ts', cmdForCommandUndefined)
+    const pathToExpectedService = path.join(
+      pathToExpectedDirectory,
+      projectLegalFilesName,
+      'src/services/car.ts'
+    )
+    const pathToActualService = path.join(actualDirToCreate, 'src/services/car.ts')
+    compareTestFilesByPaths(pathToActualService, pathToExpectedService)
+
+    const pathToExpectedInjector = path.join(
+      pathToExpectedDirectory,
+      projectLegalFilesName,
+      'src/core/injector.ts'
+    )
+    const pathToActualInjector = path.join(actualDirToCreate, 'src/core/injector.ts')
+    compareTestFilesByPaths(pathToActualInjector, pathToExpectedInjector)
+
+    const pathToExpectedContext = path.join(
+      pathToExpectedDirectory,
+      projectLegalFilesName,
+      'src/context.ts'
+    )
+    const pathToActualContext = path.join(actualDirToCreate, 'src/context.ts')
+    compareTestFilesByPaths(pathToActualContext, pathToExpectedContext)
+
+    const pathToExpectedContextInterface = path.join(
+      pathToExpectedDirectory,
+      projectLegalFilesName,
+      'src/interfaces/IAppContext.ts'
+    )
+    const pathToActualContextInterface = path.join(
+      actualDirToCreate,
+      'src/interfaces/IAppContext.ts'
+    )
+    compareTestFilesByPaths(pathToActualContextInterface, pathToExpectedContextInterface)
+  })
+
+  it('Should update files after service command alternate prefix', async () => {
+    const actualDirToCreate = path.join(pathToActualDirectory, projectLegalFilesAlternatePrefix)
+    fse.mkdirsSync(actualDirToCreate)
+    fse.copySync(absPathToProjectWithAlternatePrfix, actualDirToCreate)
     process.chdir(actualDirToCreate)
     const act = service.getAction()
     await act('car.ts', cmdForCommandUndefined)
