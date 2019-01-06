@@ -10,7 +10,7 @@ export const importServicePrefix = '@src/services'
 export const serviceFileSuffix = ' {\n}'
 export const serviceFileNameSuffix = 'Service'
 export const injectorStartSeparators = ['([']
-export const contextStartSeparators = ['return {']
+export const contextStartSeparators = ['return {', 'return{']
 export const contextInterfaceStartSeparators = ['{']
 export const injectorSignatureFn = (serviceName: string) => '  ' + serviceName + ','
 export const contextSignatureFn = (serviceName: string) =>

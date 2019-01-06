@@ -8,7 +8,16 @@ const questions = [
     type: 'rawlist',
     name: 'seedName',
     message: 'Select seed type',
-    choices: ['graphql-server-typed', 'apollo-typed-lambda']
+    choices: [
+      {
+        name: 'graphql-server-typed: Typescript server deployed on now',
+        value: 'graphql-server-typed'
+      },
+      {
+        name: 'apollo-typed-lambda: Typescript server for aws lambda deployment',
+        value: 'apollo-typed-lambda'
+      }
+    ]
   }
 ]
 
