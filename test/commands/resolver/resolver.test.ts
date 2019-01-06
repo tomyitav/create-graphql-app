@@ -12,11 +12,11 @@ describe('Resolver command test', () => {
   const pathToActualResolver1 = path.join(__dirname, '../../output/actual/test-resolver.ts')
   const pathToActualResolverTweets = path.join(
     __dirname,
-    '../..output/actual/tweets-test-resolver.ts'
+    '../../output/actual/tweets-test-resolver.ts'
   )
   const pathToDirectoryActualResolver = path.join(
     __dirname,
-    '../..output/actual/non/existing/dir/test-resolver.ts'
+    '../../output/actual/non/existing/dir/test-resolver.ts'
   )
   const resolverDirLocation = path.join(__dirname, '../../output/actual/non')
   const pathToExpectedResolver1 = path.join(
