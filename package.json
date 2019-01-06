@@ -108,7 +108,7 @@
     "@types/cross-spawn": "6.0.0",
     "@types/fs-extra": "5.0.4",
     "@types/inquirer": "0.0.43",
-    "@types/jest": "23.3.11",
+    "@types/jest": "23.3.12",
     "@types/lodash": "4.14.119",
     "@types/node": "10.12.18",
     "@types/rimraf": "2.0.2",
