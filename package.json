@@ -1,6 +1,6 @@
 {
   "name": "generate-graphql-app",
-  "version": "1.5.1",
+  "version": "1.5.2",
   "description": "Cli tool for bootstrapping production grade GraphQL server",
   "keywords": [
     "graphql",
