@@ -14,4 +14,6 @@ const resolveFunctions = {
 		deleteTweet(rootObj: any, args: any, context: IAppContext) {},
 		markTweetRead(rootObj: any, args: any, context: IAppContext) {},
 	},
-};
+}
+
+export default resolveFunctions
