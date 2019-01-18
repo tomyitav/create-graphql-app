@@ -1,6 +1,6 @@
 export const resolverPrefix =
   "import { IAppContext } from '@src/interfaces/IAppContext'\n\nconst resolveFunctions = {\n"
-export const resolverSuffix = '};\n'
+export const resolverSuffix = '}\n\nexport default resolveFunctions\n'
 export const operationPrefix = ': {\n'
 export const operationSuffix = '\t},\n'
 export const operationFuntionsSuffix = '\t},\n'

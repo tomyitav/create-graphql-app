@@ -12,4 +12,6 @@ const resolveFunctions = {
       subscribe: (rootObj: any, args: any, context: IAppContext) => {},
     },
   },
-};
+}
+
+export default resolveFunctions
