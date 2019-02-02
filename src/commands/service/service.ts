@@ -160,7 +160,10 @@ export class Service extends AbstractCommand {
   }
 
   private getServiceClassName(servicePath: string) {
-    return _.startCase(path.parse(servicePath).base.split('.')[0]) + serviceFileNameSuffix
+    return (
+      _.startCase(path.parse(servicePath).base.split('.')[0]).replace(/\W/g, '') +
+      serviceFileNameSuffix
+    )
   }
 
   private async modifyServiceDefinitionFile(
