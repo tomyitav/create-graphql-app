@@ -14,6 +14,7 @@ describe('test for service command', () => {
   const projectOneMissingFile = 'project-with-one-missing-file'
   const projectMissingServicesDir = 'project-with-no-services-dir'
   const projectLegalFilesNameInner = 'project-with-legal-files-inner-dir'
+  const projectLegalFilesNameInnerDash = 'project-with-legal-files-inner-dash-dir'
   const project2InnerDirs = 'project-with-2-inner-dirs'
   const cmdForCommandUndefined: ActionCmd = {
     parent: {
@@ -353,6 +354,49 @@ describe('test for service command', () => {
     const pathToExpectedContextInterface = path.join(
       pathToExpectedDirectory,
       projectLegalFilesNameInner,
+      'src/interfaces/IAppContext.ts'
+    )
+    const pathToActualContextInterface = path.join(
+      actualDirToCreate,
+      'src/interfaces/IAppContext.ts'
+    )
+    compareTestFilesByPaths(pathToActualContextInterface, pathToExpectedContextInterface)
+  })
+
+  it('Should update files after service command action inner dir in dash format', async () => {
+    const actualDirToCreate = path.join(pathToActualDirectory, projectLegalFilesNameInnerDash)
+    fse.mkdirsSync(actualDirToCreate)
+    fse.copySync(absPathToProjectWithLegalFile, actualDirToCreate)
+    process.chdir(actualDirToCreate)
+    const act = service.getAction()
+    await act('/inner/dir/dash-car.ts', cmdForCommandUndefined)
+    const pathToExpectedService = path.join(
+      pathToExpectedDirectory,
+      projectLegalFilesNameInnerDash,
+      'src/services/inner/dir/dash-car.ts'
+    )
+    const pathToActualService = path.join(actualDirToCreate, 'src/services/inner/dir/dash-car.ts')
+    compareTestFilesByPaths(pathToActualService, pathToExpectedService)
+
+    const pathToExpectedInjector = path.join(
+      pathToExpectedDirectory,
+      projectLegalFilesNameInnerDash,
+      'src/core/injector.ts'
+    )
+    const pathToActualInjector = path.join(actualDirToCreate, 'src/core/injector.ts')
+    compareTestFilesByPaths(pathToActualInjector, pathToExpectedInjector)
+
+    const pathToExpectedContext = path.join(
+      pathToExpectedDirectory,
+      projectLegalFilesNameInnerDash,
+      'src/context.ts'
+    )
+    const pathToActualContext = path.join(actualDirToCreate, 'src/context.ts')
+    compareTestFilesByPaths(pathToActualContext, pathToExpectedContext)
+
+    const pathToExpectedContextInterface = path.join(
+      pathToExpectedDirectory,
+      projectLegalFilesNameInnerDash,
       'src/interfaces/IAppContext.ts'
     )
     const pathToActualContextInterface = path.join(
