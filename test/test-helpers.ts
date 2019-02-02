@@ -3,18 +3,16 @@ import * as fs from 'fs'
 export const compareTestFilesByPaths = (
   pathToActual: string,
   pathToExpected: string,
-  shouldEqual: boolean = true,
-  shouldIgnoreSpaces: boolean = true
+  shouldEqual: boolean = true
 ) => {
-  const actualContent = fs.readFileSync(pathToActual).toString()
-  if (shouldIgnoreSpaces) {
-    actualContent.replace(/\s/g, '')
-  }
-
-  const expectedContent = fs.readFileSync(pathToExpected).toString()
-  if (shouldIgnoreSpaces) {
-    expectedContent.replace(/\s/g, '')
-  }
+  const actualContent = fs
+    .readFileSync(pathToActual)
+    .toString()
+    .replace(/\s/g, '')
+  const expectedContent = fs
+    .readFileSync(pathToExpected)
+    .toString()
+    .replace(/\s/g, '')
 
   if (shouldEqual) {
     expect(actualContent).toEqual(expectedContent)

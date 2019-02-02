@@ -9,10 +9,10 @@ import { AbstractSetting } from './config/AbstractSetting'
 import { Setting } from './config/Setting'
 import { AbstractLogger } from './logger/AbstractLogger'
 import { Logger } from './logger/Logger'
-import { CarService } from '@src/services/inner/dir/car'
+import { DashCarService } from '@src/services/inner/dir/dash-car'
 
 const injector: Injector = ReflectiveInjector.resolveAndCreate([
-  CarService,
+  DashCarService,
   { provide: AbstractLogger, useClass: Logger },
   { provide: AbstractSetting, useClass: Setting },
   { provide: AbstractPubsubManager, useClass: PubsubManager },

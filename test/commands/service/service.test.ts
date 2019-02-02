@@ -57,20 +57,20 @@ describe('test for service command', () => {
     service = new Service()
   })
 
-  afterEach(() => {
-    const dirsInActual = listAllDirectories(pathToActualDirectory)
-    for (let dir of dirsInActual) {
-      fse.remove(path.join(pathToActualDirectory, dir), err => {
-        if (err) {
-          console.log(
-            'Could not remove cloned dir. On windows desktops, remove it manually...',
-            err
-          )
-        }
-      })
-    }
-    process.chdir(__dirname)
-  })
+  // afterEach(() => {
+  //   const dirsInActual = listAllDirectories(pathToActualDirectory)
+  //   for (let dir of dirsInActual) {
+  //     fse.remove(path.join(pathToActualDirectory, dir), err => {
+  //       if (err) {
+  //         console.log(
+  //           'Could not remove cloned dir. On windows desktops, remove it manually...',
+  //           err
+  //         )
+  //       }
+  //     })
+  //   }
+  //   process.chdir(__dirname)
+  // })
 
   it('works if action returns a function', () => {
     const act = service.getAction()
@@ -376,7 +376,7 @@ describe('test for service command', () => {
       'src/services/inner/dir/dash-car.ts'
     )
     const pathToActualService = path.join(actualDirToCreate, 'src/services/inner/dir/dash-car.ts')
-    compareTestFilesByPaths(pathToActualService, pathToExpectedService, true, false)
+    compareTestFilesByPaths(pathToActualService, pathToExpectedService)
 
     const pathToExpectedInjector = path.join(
       pathToExpectedDirectory,
