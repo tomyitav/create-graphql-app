@@ -37,7 +37,7 @@ describe('Init command test', () => {
 
   it('works if directory is cloned after applying init', async () => {
     jest.setTimeout(180000)
-    mockedInquirer.prompt.mockReturnValue({ seedName: 'graphql-server-typed' })
+    mockedInquirer.prompt.mockReturnValue({ seedName: 'graphql-server-typed' } as any)
     const actFunction = init.getAction()
     await actFunction(pathToProjectDir)
     const projectFolderExists: boolean = fs.lstatSync(absoluteProcessDir).isDirectory()
