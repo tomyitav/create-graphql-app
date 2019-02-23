@@ -127,7 +127,7 @@
     "replace-in-file": "3.4.3",
     "rimraf": "2.6.3",
     "rollup": "1.2.2",
-    "rollup-plugin-commonjs": "9.2.0",
+    "rollup-plugin-commonjs": "9.2.1",
     "rollup-plugin-json": "3.1.0",
     "rollup-plugin-node-resolve": "4.0.0",
     "rollup-plugin-preserve-shebang": "0.1.6",
