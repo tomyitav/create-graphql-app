@@ -107,7 +107,7 @@
     "@commitlint/config-conventional": "7.5.0",
     "@types/cross-spawn": "6.0.0",
     "@types/fs-extra": "5.0.5",
-    "@types/inquirer": "0.0.43",
+    "@types/inquirer": "0.0.44",
     "@types/jest": "24.0.6",
     "@types/lodash": "4.14.121",
     "@types/node": "10.12.27",
