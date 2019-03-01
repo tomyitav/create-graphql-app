@@ -36,7 +36,7 @@ Open shell in the desired folder for bootstrapping the server, and typed:
 The command will prompt available server seeds options. Choose the boilerplate project
 you want, and start coding! 
 
-![](init-demo.gif)
+![](init-demo.gif | width=100)
 
 ### Generate server resolver files
 
