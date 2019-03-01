@@ -34,9 +34,11 @@ Open shell in the desired folder for bootstrapping the server, and typed:
 ```gga init <project-name>```
 
 The command will prompt available server seeds options. Choose the boilerplate project
-you want, and start coding! 
+you want, and start coding!
 
-![](init-demo.gif | width=100)
+
+![](init-demo.gif)
+ 
 
 ### Generate server resolver files
 
