@@ -126,7 +126,7 @@
     "prompt": "1.0.0",
     "replace-in-file": "3.4.4",
     "rimraf": "2.6.3",
-    "rollup": "1.9.3",
+    "rollup": "1.10.0",
     "rollup-plugin-commonjs": "9.3.4",
     "rollup-plugin-json": "4.0.0",
     "rollup-plugin-node-resolve": "4.2.2",
