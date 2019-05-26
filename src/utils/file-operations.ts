@@ -7,7 +7,6 @@ const find = find_
 const allowedFileExtensions = ['.ts']
 
 export type FileType = 'file' | 'dir'
-export type LetterModifyType = 'lower' | 'upper'
 
 export function writeToFile(pathToFile: string, content: string): Promise<void> {
   return new Promise((resolve, reject) => {
@@ -16,11 +15,7 @@ export function writeToFile(pathToFile: string, content: string): Promise<void> 
       reject('Illegal file extension.. only ' + allowedFileExtensions + ' extensions are allowed')
       return
     }
-    fse.ensureDir(pathProps.dir, err => {
-      if (err) {
-        reject(err)
-        return
-      }
+    return fse.ensureDir(pathProps.dir).then(() => {
       fs.writeFile(pathToFile, content, err => {
         if (err) {
           reject(err)

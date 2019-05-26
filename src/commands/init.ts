@@ -3,7 +3,7 @@ import * as inquirer from 'inquirer'
 import { shell } from '../utils/shell'
 import logger from '../utils/logger'
 
-const questions = [
+const questions: inquirer.Questions = [
   {
     type: 'rawlist',
     name: 'seedName',
