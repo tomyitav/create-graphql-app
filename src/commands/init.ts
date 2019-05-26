@@ -2,9 +2,8 @@ import { AbstractCommand } from './abstract-command'
 import * as inquirer from 'inquirer'
 import { shell } from '../utils/shell'
 import logger from '../utils/logger'
-import { Questions } from 'inquirer'
 
-const questions: Questions = [
+const questions: inquirer.Questions = [
   {
     type: 'rawlist',
     name: 'seedName',
