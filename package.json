@@ -120,7 +120,7 @@
     "husky": "2.7.0",
     "jest": "24.8.0",
     "jest-config": "24.8.0",
-    "lint-staged": "8.1.7",
+    "lint-staged": "9.2.1",
     "lodash.camelcase": "4.3.0",
     "prettier": "1.18.2",
     "prompt": "1.0.0",
