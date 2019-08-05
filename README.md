@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/tomyitav/generate-graphql-app.svg?branch=master)](https://travis-ci.org/tomyitav/generate-graphql-app)
 [![Coverage Status](https://coveralls.io/repos/github/tomyitav/generate-graphql-app/badge.svg?branch=master)](https://coveralls.io/github/tomyitav/generate-graphql-app?branch=master)
-[![npm](https://img.shields.io/npm/v/generate-graphql-app.svg)](https://www.npmjs.com/package/generate-graphql-app)
+[![npm](https://img.shields.io/npm/v/create-graphql-app.svg)](https://www.npmjs.com/package/generate-graphql-app)
 [![MIT licensed](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
 [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
 [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
