@@ -7,7 +7,7 @@ import shebang from 'rollup-plugin-preserve-shebang'
 
 const pkg = require('./package.json')
 
-const libraryName = 'gga'
+const libraryName = 'cga'
 
 export default {
   input: `src/${libraryName}.ts`,

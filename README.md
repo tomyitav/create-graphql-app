@@ -1,4 +1,4 @@
-# generate-graphql-app
+# create-graphql-app
 
 [![Build Status](https://travis-ci.org/tomyitav/generate-graphql-app.svg?branch=master)](https://travis-ci.org/tomyitav/generate-graphql-app)
 [![Coverage Status](https://coveralls.io/repos/github/tomyitav/generate-graphql-app/badge.svg?branch=master)](https://coveralls.io/github/tomyitav/generate-graphql-app?branch=master)
@@ -23,7 +23,7 @@ Cli tool for bootstrapping production grade GraphQL server, using:
 
 Please make sure you have Node.js version 8+, and type
 
-```npm install -g generate-graphql-app```
+```npm install -g create-graphql-app```
 
 ## CLI commands
 
@@ -31,7 +31,7 @@ Please make sure you have Node.js version 8+, and type
 
 Open shell in the desired folder for bootstrapping the server, and typed:
 
-```gga init <project-name>```
+```cga init <project-name>```
 
 The command will prompt available server seeds options. Choose the boilerplate project
 you want, and start coding!
@@ -47,7 +47,7 @@ Our recommended way for schema design is to create a type file for certain entit
 Eventually, all entities schemas are merged.
 To generate a matching resolver file for type file, execute the command: 
 
-```gga r <type-file> <resolver file>```
+```cga r <type-file> <resolver file>```
 
 This will create a matching file, with all Query, Mutation and Subscription
 definitions.
@@ -58,7 +58,7 @@ Our server resolvers should operate as a thin layer, or controller, that links b
 and the server business logic. We use *services* for our model, to perform logic such as api fetching,
 db operations, etc. In order to create a new service, run the command:
 
-```gga s <service-path> [--ignoreContext]```
+```cga s <service-path> [--ignoreContext]```
 
 This will create a new service file to services directory. Also, it will register the service on the
 server *injector* file, and will add its definition to the context object, thus allowing its usage
@@ -69,7 +69,7 @@ You can exclude context file additions by passing the *ignoreContext* flag.
 
 Inside the project directory, type: 
 
-```gga d```
+```cga d```
 
 This will run the server *deploy* script, and will move the server to production! :rocket:
 
