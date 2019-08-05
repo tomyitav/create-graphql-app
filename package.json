@@ -106,7 +106,7 @@
     "@commitlint/cli": "8.1.0",
     "@commitlint/config-conventional": "8.1.0",
     "@types/cross-spawn": "6.0.0",
-    "@types/fs-extra": "7.0.0",
+    "@types/fs-extra": "8.0.0",
     "@types/inquirer": "6.0.3",
     "@types/jest": "24.0.16",
     "@types/lodash": "4.14.136",
