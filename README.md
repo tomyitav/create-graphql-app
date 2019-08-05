@@ -23,7 +23,7 @@ Cli tool for bootstrapping production grade GraphQL server, using:
 
 Please make sure you have Node.js version 8+, and type
 
-```npm install -g generate-graphql-app```
+```npm install -g create-graphql-app```
 
 ## CLI commands
 
