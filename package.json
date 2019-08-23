@@ -149,7 +149,7 @@
     "find": "0.3.0",
     "fs-extra": "8.1.0",
     "graphql-json-schema": "0.1.2",
-    "inquirer": "6.5.0",
+    "inquirer": "6.5.2",
     "lodash": "4.17.15",
     "pkginfo": "0.4.1",
     "typescript-parser": "2.6.1",
