@@ -144,7 +144,7 @@
     "typescript": "3.5.3"
   },
   "dependencies": {
-    "commander": "2.20.0",
+    "commander": "3.0.2",
     "cross-spawn": "6.0.5",
     "find": "0.3.0",
     "fs-extra": "8.1.0",
