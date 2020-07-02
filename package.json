@@ -145,7 +145,7 @@
   },
   "dependencies": {
     "commander": "2.20.0",
-    "cross-spawn": "6.0.5",
+    "cross-spawn": "7.0.3",
     "find": "0.3.0",
     "fs-extra": "8.1.0",
     "graphql-json-schema": "0.1.2",
