@@ -75,4 +75,4 @@ This will run the server *deploy* script, and will move the server to production
 
 ### Extended documentation
 
-Please check out the [extended documentation](https://tomyitav.github.io/generate-graphql-app) for more information
+Please check out the [extended documentation](https://tomyitav.github.io/create-graphql-app) for more information
