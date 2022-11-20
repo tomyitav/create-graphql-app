@@ -133,7 +133,7 @@
     "rollup-plugin-preserve-shebang": "0.1.6",
     "rollup-plugin-sourcemaps": "0.4.2",
     "rollup-plugin-typescript2": "0.22.1",
-    "semantic-release": "15.13.19",
+    "semantic-release": "15.14.0",
     "travis-deploy-once": "5.0.11",
     "ts-jest": "24.0.2",
     "ts-node": "8.3.0",
